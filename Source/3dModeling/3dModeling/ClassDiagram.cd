@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Modeling.Core.Elements.Edge" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Elements\Edge.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Elements.Point3D" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Core\Elements\Point3D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Elements.Side" Collapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Elements\Side.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Grid" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Grid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Transformations" Collapsed="true">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAWgAAQAAAQAACAAIAARCAAIIAAABAAEAAAQAAAAA=</HashCode>
+      <FileName>Core\Transformations.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.BaseShape" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAgAAAAIAAAgAAAAIAAAAAGAAIAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\BaseShape.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.Cone" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\Cone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.CoordinateAxises" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAgAAAAIAAAAACAAAAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\CoordinateAxises.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.Cube" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\Cube.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.Polygon" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\Polygon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.Pyramid" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAgABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\Pyramid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.EntryPoint" Collapsed="true">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>EntryPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Properties.Resources" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.UI.Controls.ObjectsTree" Collapsed="true">
+    <Position X="14.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAACAAAAAAAACAUgACAIAAAAAAAAACgAgCAAA=</HashCode>
+      <FileName>UI\Controls\ObjectsTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.UI.Forms.MainForm" Collapsed="true">
+    <Position X="11" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQAgCCEEAGAAABAQFEPEBgACAgAQAAAXgFDQApAQCAA=</HashCode>
+      <FileName>UI\Forms\MainForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.UI.Forms.ObjectsForm" Collapsed="true">
+    <Position X="12.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAGAABAAAAACAAAhCAAAAAAAAgAACAAIAAAA=</HashCode>
+      <FileName>UI\Forms\ObjectsForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
