@@ -18,5 +18,6 @@ namespace Modeling
         }
 
         // Comment from SVN
+        // Comment from Visual SVN
     }
 }
