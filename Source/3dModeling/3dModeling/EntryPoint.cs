@@ -16,5 +16,7 @@ namespace Modeling
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
+
+        // Comment from SVN
     }
 }
