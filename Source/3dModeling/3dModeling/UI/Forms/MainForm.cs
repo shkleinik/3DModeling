@@ -342,19 +342,25 @@ namespace Modeling.UI.Forms
 
         private List<BaseShape> DeserializeShapes(string path)
         {
-            Stream reader = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Open, FileAccess.Read);
+            Stream reader = null;
             try
             {
+                reader = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Open, FileAccess.Read);
                 var serializer = new XmlSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
                 return (List<BaseShape>)serializer.Deserialize(reader);
             }
             catch (Exception)
             {
-                return new List<BaseShape>();
+                return new List<BaseShape>
+                           {
+                               new CoordinateAxises(basePoint)
+                           };
+
             }
             finally
             {
-                reader.Close();
+                if (reader != null)
+                    reader.Close();
             }
         }
         #endregion
