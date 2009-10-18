@@ -1,4 +1,4 @@
-﻿namespace Modeling.UI.Forms
+﻿namespace Modeling.UI.Forms.CreateForms
 {
     partial class CreatePyramidForm
     {

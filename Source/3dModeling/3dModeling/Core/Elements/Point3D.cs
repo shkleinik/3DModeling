@@ -4,11 +4,15 @@ namespace Modeling.Core.Elements
 {
     public class Point3D
     {
+        #region Properties
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
+        #endregion
 
         #region Constructors
+        private Point3D() { }
+
         public Point3D(float x, float y)
         {
             X = x;

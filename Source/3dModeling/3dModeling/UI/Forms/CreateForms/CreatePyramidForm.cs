@@ -4,20 +4,20 @@ using System.Windows.Forms;
 using Modeling.Core.Elements;
 using Modeling.Core.Shapes;
 
-namespace Modeling.UI.Forms
+namespace Modeling.UI.Forms.CreateForms
 {
-    public partial class CreateConeForm : Form
+    public partial class CreatePyramidForm : Form
     {
         private const string ERROR_MESSAGEBOX_TITLE = "Walash Software : Error";
 
         private readonly List<BaseShape> objects3D;
 
-        public CreateConeForm()
+        public CreatePyramidForm()
         {
             InitializeComponent();
         }
 
-        public CreateConeForm(List<BaseShape> objects3D)
+        public CreatePyramidForm(List<BaseShape> objects3D)
         {
             InitializeComponent();
             this.objects3D = objects3D;
@@ -28,17 +28,17 @@ namespace Modeling.UI.Forms
             var bP = GetBasePoint();
             try
             {
-                var xDisplacement = Convert.ToSingle(tbX.Text);
-                var yDisplacement = Convert.ToSingle(tbY.Text);
-                var zDisplacement = Convert.ToSingle(tbZ.Text);
+                var xDisplacement = Convert.ToSingle((string) tbX.Text);
+                var yDisplacement = Convert.ToSingle((string) tbY.Text);
+                var zDisplacement = Convert.ToSingle((string) tbZ.Text);
 
                 var newBasePoint = new Point3D(bP.X + xDisplacement, bP.Y + yDisplacement, bP.Z + zDisplacement);
 
-                
-                var radius = Convert.ToUInt32(tbRadius.Text);
-                var height = Convert.ToSingle(tbHeight.Text);
-                var cone = new Cone(newBasePoint,  radius, height);
-                objects3D.Add(cone);
+                var sidesNumber = Convert.ToInt32((string) tbSidesNumber.Text);
+                var radius = Convert.ToUInt32((string) tbRadius.Text);
+                var height = Convert.ToSingle((string) tbHeight.Text);
+                var pyramid = new Pyramid(newBasePoint, sidesNumber, radius, height);
+                objects3D.Add(pyramid);
             }
             catch (FormatException ex)
             {

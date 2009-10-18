@@ -6,6 +6,7 @@ namespace Modeling.Core
 {
     class Transformations
     {
+        #region Fields
         private float sX;
         private float cX;
 
@@ -14,14 +15,15 @@ namespace Modeling.Core
 
         private float sZ;
         private float cZ;
+        #endregion
 
+        #region Rotation
         public Edge RotateEdge(Point3D basePoint, Edge edge, double angleX, double angleY, double angleZ)
         {
             var v1 = RotateVertex(basePoint, edge.Vertex1, angleX, angleY, angleZ);
             var v2 = RotateVertex(basePoint, edge.Vertex2, angleX, angleY, angleZ);
             return new Edge(v1, v2);
         }
-
         /// <summary>
         /// Rotates gived coordinates relatively current base point
         /// </summary>
@@ -72,22 +74,34 @@ namespace Modeling.Core
         private float RotateX(Point3D bP, Point3D p)
         {
             return p.X * (cX * cZ + sX * sY * sZ) + p.Y * (-sX * cZ + cX * sY * sZ) + p.Z * cY * sZ + cZ * (-bP.X * cX + bP.Y * sX) + ((-bP.X * sX - bP.Y * cX) * sY - bP.Z * cY) * sZ + bP.X;
+            //return p.X*(cX*cZ + sX*sY*sZ) + p.Y*(-sX*cY + cX*sY*sZ) + p.Z*cY*sZ;
         }
 
         private float RotateY(Point3D bP, Point3D p)
         {
             return p.X * sX * cY + p.Y * cX * cY - p.Z * sY + cY * (-bP.X * sX - bP.Y * cX) + bP.Z * sY + bP.Y;
+            //return p.X*sX*cY + p.Y*cX*cY - p.Z*sY;
         }
 
         private float RotateZ(Point3D bP, Point3D p)
         {
             return p.X * (-cX * sZ + sX * sY * cZ) + p.Y * (sX * sZ + cX * sY * cZ) + p.Z * cY * cZ + sZ * (bP.X * cX - bP.Y * sX) + ((-bP.X * sX - bP.Y * cX) * sY - bP.Z * cY) + bP.Z;
+            //return p.X*(-cX*sZ + sX*sY*cZ) + p.Y*(sX*sZ + cX*sY*cZ) + p.Z*cY*cZ;
         }
+        #endregion
 
+        #region Scale
         public static Edge ScaleEdge(Point3D basePoint, Edge edge, float scale)
         {
             var v1 = ScaleVertex(basePoint, edge.Vertex1, scale);
             var v2 = ScaleVertex(basePoint, edge.Vertex2, scale);
+            return new Edge(v1, v2);
+        }
+
+        public static Edge ScaleEdge(Point3D basePoint, Edge edge, float scaleX, float scaleY, float scaleZ)
+        {
+            var v1 = ScaleVertex(basePoint, edge.Vertex1, scaleX, scaleY, scaleZ);
+            var v2 = ScaleVertex(basePoint, edge.Vertex2, scaleX, scaleY, scaleZ);
             return new Edge(v1, v2);
         }
 
@@ -96,6 +110,15 @@ namespace Modeling.Core
             var x = ScaleX(basePoint, vertex, scale);
             var y = ScaleY(basePoint, vertex, scale);
             var z = ScaleZ(basePoint, vertex, scale);
+
+            return new Point3D(x, y, z);
+        }
+
+        public static Point3D ScaleVertex(Point3D basePoint, Point3D vertex, float scaleX, float scaleY, float scaleZ)
+        {
+            var x = ScaleX(basePoint, vertex, scaleX);
+            var y = ScaleY(basePoint, vertex, scaleY);
+            var z = ScaleZ(basePoint, vertex, scaleZ);
 
             return new Point3D(x, y, z);
         }
@@ -128,10 +151,12 @@ namespace Modeling.Core
         {
             return (point.Z * scale + 1 * (basePoint.Z * (1 - scale)));
         }
+        #endregion
 
+        #region Move
         public static Edge MoveEdge(Edge edge, float dX, float dY, float dZ)
         {
-            return new Edge(MoveXY(edge.Vertex1, dX, dY, dZ), MoveXY(edge.Vertex2, dX, dY, dZ));
+            return new Edge(MoveXYZ(edge.Vertex1, dX, dY, dZ), MoveXYZ(edge.Vertex2, dX, dY, dZ));
         }
 
         public static List<Point3D> MoveVertexes(List<Point3D> vertexesCoordinates, float dX, float dY, float dZ)
@@ -139,15 +164,48 @@ namespace Modeling.Core
             var movedVertexes = new List<Point3D>();
             foreach (var vertex in vertexesCoordinates)
             {
-                movedVertexes.Add(MoveXY(vertex, dX, dY, dZ));
+                movedVertexes.Add(MoveXYZ(vertex, dX, dY, dZ));
             }
             return movedVertexes;
         }
 
-        private static Point3D MoveXY(Point3D point, float dX, float dY, float dZ)
+        private static Point3D MoveXYZ(Point3D point, float dX, float dY, float dZ)
         {
             var pointNew = new Point3D(point.X + dX, point.Y - dY, point.Z + dZ);
             return pointNew;
         }
+        #endregion
+
+        #region Projections
+        public static Edge XYProjection(Edge edge)
+        {
+            return new Edge(XYProjection(edge.Vertex1), XYProjection(edge.Vertex2));
+        }
+
+        public static Edge YZProjection(Edge edge)
+        {
+            return new Edge(YZProjection(edge.Vertex1), YZProjection(edge.Vertex2));
+        }
+
+        public static Edge XZProjection(Edge edge)
+        {
+            return new Edge(XZProjection(edge.Vertex1), XZProjection(edge.Vertex2));
+        }
+
+        private static Point3D XYProjection(Point3D p)
+        {
+            return new Point3D(p.X, p.Y, 0);
+        }
+
+        private static Point3D YZProjection(Point3D p)
+        {
+            return new Point3D(0, p.Y, p.Z);
+        }
+
+        private static Point3D XZProjection(Point3D p)
+        {
+            return new Point3D(p.X, 0, p.Z);
+        }
+        #endregion
     }
 }
