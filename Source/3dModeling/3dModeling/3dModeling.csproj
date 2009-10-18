@@ -186,8 +186,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icons\Logo.ico" />
-    <Content Include="Icons\RotateCursor.cur">
-    </Content>
+    <None Include="Icons\RotateCursor.cur">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Logo.ico" />
   </ItemGroup>
   <ItemGroup>
