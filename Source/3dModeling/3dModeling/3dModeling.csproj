@@ -73,23 +73,42 @@
     <Compile Include="Core\Shapes\Polygon.cs" />
     <Compile Include="Core\Shapes\Pyramid.cs" />
     <Compile Include="Core\Transformations.cs" />
+    <Compile Include="UI\Constants.cs" />
     <Compile Include="UI\Controls\ObjectsTree.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\Controls\ObjectsTree.Designer.cs">
       <DependentUpon>ObjectsTree.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Forms\CreateConeForm.cs">
+    <Compile Include="UI\Forms\CreateForms\CreateConeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Forms\CreateConeForm.Designer.cs">
+    <Compile Include="UI\Forms\CreateForms\CreateConeForm.Designer.cs">
       <DependentUpon>CreateConeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Forms\CreatePyramidForm.cs">
+    <Compile Include="UI\Forms\CreateForms\CreatePyramidForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Forms\CreatePyramidForm.Designer.cs">
+    <Compile Include="UI\Forms\CreateForms\CreatePyramidForm.Designer.cs">
       <DependentUpon>CreatePyramidForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\MovePrimitiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\MovePrimitiveForm.Designer.cs">
+      <DependentUpon>MovePrimitiveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\RotatePrimitiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\RotatePrimitiveForm.Designer.cs">
+      <DependentUpon>RotatePrimitiveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\ScalePrimitiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\EditForms\ScalePrimitiveForm.Designer.cs">
+      <DependentUpon>ScalePrimitiveForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -103,12 +122,24 @@
       <DependentUpon>ObjectsTree.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\CreateConeForm.resx">
+    <EmbeddedResource Include="UI\Forms\CreateForms\CreateConeForm.resx">
       <DependentUpon>CreateConeForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Forms\CreatePyramidForm.resx">
+    <EmbeddedResource Include="UI\Forms\CreateForms\CreatePyramidForm.resx">
       <DependentUpon>CreatePyramidForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\EditForms\MovePrimitiveForm.resx">
+      <DependentUpon>MovePrimitiveForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\EditForms\RotatePrimitiveForm.resx">
+      <DependentUpon>RotatePrimitiveForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\EditForms\ScalePrimitiveForm.resx">
+      <DependentUpon>ScalePrimitiveForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\MainForm.resx">

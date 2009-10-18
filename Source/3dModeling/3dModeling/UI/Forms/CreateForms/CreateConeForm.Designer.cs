@@ -1,4 +1,4 @@
-﻿namespace Modeling.UI.Forms
+﻿namespace Modeling.UI.Forms.CreateForms
 {
     partial class CreateConeForm
     {
@@ -164,7 +164,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CreateConeForm";
-            this.Text = "CreateConeForm";
+            this.Text = "Create Cone";
             this.ResumeLayout(false);
             this.PerformLayout();
 

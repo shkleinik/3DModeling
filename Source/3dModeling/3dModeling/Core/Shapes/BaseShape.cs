@@ -1,20 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Xml.Serialization;
 using Modeling.Core.Elements;
 
 namespace Modeling.Core.Shapes
 {
+    [Serializable]
     public class BaseShape
     {
         #region Fields
-        protected List<Edge> initialEdges;
-        protected List<Edge> previousState;
-        protected List<Edge> Edges;
+        public List<Edge> initialEdges;
+        public List<Edge> previousState;
+        public List<Edge> Edges;
         #endregion
 
         #region Constructors
-        public BaseShape()
+        protected BaseShape()
         {
             Edges = new List<Edge>();
             initialEdges = new List<Edge>();
@@ -29,6 +30,16 @@ namespace Modeling.Core.Shapes
             foreach (var edge in Edges)
             {
                 tmpEdges.Add(Transformations.ScaleEdge(basePoint, edge, scale));
+            }
+            Edges = tmpEdges;
+        }
+
+        public virtual void Scale(Point3D basePoint, float scaleX, float scaleY, float scaleZ)
+        {
+            var tmpEdges = new List<Edge>();
+            foreach (var edge in Edges)
+            {
+                tmpEdges.Add(Transformations.ScaleEdge(basePoint, edge, scaleX, scaleY, scaleZ));
             }
             Edges = tmpEdges;
         }
@@ -54,8 +65,34 @@ namespace Modeling.Core.Shapes
             }
         }
 
+        public void XYProjection()
+        {
+            Edges.Clear();
+            foreach (var edge in initialEdges)
+            {
+                Edges.Add(Transformations.XYProjection(edge));
+            }
+        }
 
+        public void YZProjection()
+        {
+            Edges.Clear();
+            foreach (var edge in initialEdges)
+            {
+                Edges.Add(Transformations.YZProjection(edge));
+            }
+            
+        }
 
+        public void XZProjection()
+        {
+            Edges.Clear();
+            foreach (var edge in initialEdges)
+            {
+                Edges.Add(Transformations.XZProjection(edge));
+            }
+            
+        }
         #endregion
 
         #region Draw logic
@@ -82,11 +119,5 @@ namespace Modeling.Core.Shapes
             }
         }
         #endregion
-
-        //[XmlInclude(typeof(CoordinateAxises)), XmlInclude(typeof(Cone)), XmlInclude(typeof(Pyramid)), XmlInclude(typeof(Cube))]
-        //public new BaseShape GetType()
-        //{
-        //    return GetType();
-        //}
     }
 }

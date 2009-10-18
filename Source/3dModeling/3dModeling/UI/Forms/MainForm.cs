@@ -23,6 +23,7 @@ namespace Modeling.UI.Forms
         #endregion
 
         #region Fields
+        private readonly List<Type> extraTypes = new List<Type> { typeof(Cone), typeof(Cube), typeof(Pyramid), typeof(CoordinateAxises) };
         private readonly Point gridStartPoint = new Point(10, 10);
         private readonly List<PointF> listOfVertexes = new List<PointF>();
         private List<BaseShape> objectsToDraw;
@@ -77,29 +78,24 @@ namespace Modeling.UI.Forms
         #endregion
 
         #region Handling Form Events
-
         private void On_MainForm_Load(object sender, EventArgs e)
         {
             basePoint = new Point3D((float)Width / 2, (float)Height / 2);
             moveStartPoint = basePoint;
 
             var cube = new Cube(new Point3D(basePoint.X - 80, basePoint.Y, basePoint.Z), 50);
-
             var pyramid = new Pyramid(basePoint, 3, 50, 100);
             var cone = new Cone(basePoint, 25, -50);
             var axises = new CoordinateAxises(basePoint);
 
-            objectsToDraw = new List<BaseShape> { axises, pyramid, cone, cube };
+            //objectsToDraw = new List<BaseShape> { axises, pyramid, cone, cube };
+            objectsToDraw = DeserializeShapes(PATHTO_SERIALIZED_STATE);
             SaveObjectsState(objectsToDraw);
         }
-        
+
         private void On_MainForm_Closing(object sender, FormClosingEventArgs e)
         {
-            // TODO: Implement serialization
-            //var serializer = new XmlSerializer(typeof(List<BaseShape>));
-            //Stream writer = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Create);
-            //serializer.Serialize(writer, objectsToDraw);
-            //writer.Close();
+
         }
 
         private void On_MainForm_Paint(object sender, PaintEventArgs e)
@@ -221,7 +217,39 @@ namespace Modeling.UI.Forms
         #region Handling Menu Events
         private void On_miObjectsToRender_Click(object sender, EventArgs e)
         {
-            (new ObjectsForm(objectsToDraw)).ShowDialog();
+            (new ObjectsForm(objectsToDraw)).ShowDialog(this);
+        }
+
+        private void On_miXY_Click(object sender, EventArgs e)
+        {
+            foreach (var shape in objectsToDraw)
+            {
+                shape.XYProjection();
+            }
+        }
+
+        private void On_miYZ_Click(object sender, EventArgs e)
+        {
+            foreach (var shape in objectsToDraw)
+            {
+                shape.YZProjection();
+            }
+        }
+
+        private void On_miXZ_Click(object sender, EventArgs e)
+        {
+            foreach (var shape in objectsToDraw)
+            {
+                shape.XZProjection();
+            }
+
+        }
+
+        private void On_miSave_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            SerializeShapes(PATHTO_SERIALIZED_STATE, objectsToDraw);
+            Cursor.Current = Cursors.Default;
         }
         #endregion
 
@@ -293,5 +321,42 @@ namespace Modeling.UI.Forms
         }
         #endregion
 
+        #region Serializtion
+        private void SerializeShapes(string path, List<BaseShape> shapes)
+        {
+            Stream writer = new FileStream(path, FileMode.Create);
+            try
+            {
+                var serializer = new XmlSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
+                serializer.Serialize(writer, shapes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                writer.Close();
+            }
+        }
+
+        private List<BaseShape> DeserializeShapes(string path)
+        {
+            Stream reader = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Open, FileAccess.Read);
+            try
+            {
+                var serializer = new XmlSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
+                return (List<BaseShape>)serializer.Deserialize(reader);
+            }
+            catch (Exception)
+            {
+                return new List<BaseShape>();
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+        #endregion
     }
 }

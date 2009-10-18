@@ -3,9 +3,11 @@ using Modeling.Core.Elements;
 
 namespace Modeling.Core.Shapes
 {
-    class Cube : BaseShape
+    public class Cube : BaseShape
     {
         public int EdgeLength { get; set; }
+
+        private Cube() { }
 
         /// <summary>
         /// Constructor for cube
