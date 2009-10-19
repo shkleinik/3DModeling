@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FD53605D-66C4-465D-A3A5-030CF237DAFB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -32,7 +32,8 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <StartupObject>
     </StartupObject>
-    <ApplicationIcon>Logo.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -186,10 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icons\Logo.ico" />
-    <None Include="Icons\RotateCursor.cur">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Content Include="Logo.ico" />
+    <EmbeddedResource Include="UI\Forms\RotateCursor.cur" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
