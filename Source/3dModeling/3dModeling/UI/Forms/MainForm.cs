@@ -18,7 +18,6 @@ namespace Modeling.UI.Forms
         private const int MIN_GRID_STEP = 5;
         private const int MAX_GRID_STEP = 100;
         private const int SCALE_STEP = 2;
-        private const string PATHTO_ROTATE_CURSOR = "Icons\\RotateCursor.cur";//"..\\..\\Icons\\RotateCursor.cur";
         private const string PATHTO_SERIALIZED_STATE = "Walash.3Dscene";
         #endregion
 
@@ -198,7 +197,7 @@ namespace Modeling.UI.Forms
             {
                 case MouseButtons.Left:
                     rotateStartAngle = GetZRotateAngle(basePoint, e.Location);
-                    Cursor = new Cursor(PATHTO_ROTATE_CURSOR);
+                    Cursor = new Cursor(GetType(), "RotateCursor.cur");
                     break;
                 case MouseButtons.Right:
                     Cursor = Cursors.SizeAll;
