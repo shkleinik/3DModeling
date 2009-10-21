@@ -1,16 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using Modeling.Core.Elements;
-using Modeling.Core.Shapes;
-using T = Modeling.Core.Transformations;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="MainForm.cs" company="Walash Ltd.">
+//     Copyright (c) Walash Ltd. All rights reserved.
+// </copyright>
+// <author>Pavel Shkleinik</author>
+//-----------------------------------------------------------------------
 namespace Modeling.UI.Forms
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.IO;
+    using System.Runtime.Serialization;
+    using System.Windows.Forms;
+    using Core.Elements;
+    using Core.Shapes;
+    using T = Core.Transformations;
+
     public partial class MainForm : Form
     {
         #region Constants
@@ -132,7 +137,6 @@ namespace Modeling.UI.Forms
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    //listOfVertexes.Add(e.Location);
                     break;
                 case MouseButtons.Right:
                     basePoint = new Point3D(e.Location);
@@ -171,7 +175,7 @@ namespace Modeling.UI.Forms
                     var rotAngleY = (e.X - moveStartPoint.X) * Math.PI / 180;
                     var dynamicAngle = GetZRotateAngle(basePoint, e.Location);
                     var rotAngleZ = dynamicAngle - rotateStartAngle;
-                    //Console.WriteLine("angleToRotate = {0:F2}, dynamicAngle  = {1:F2},rotateStartAngle = {2:F2} ", angleToRotate * 180 / Math.PI, dynamicAngle * 180 / Math.PI, rotateStartAngle * 180 / Math.PI);
+                    // Console.WriteLine("angleToRotate = {0:F2}, dynamicAngle  = {1:F2},rotateStartAngle = {2:F2} ", angleToRotate * 180 / Math.PI, dynamicAngle * 180 / Math.PI, rotateStartAngle * 180 / Math.PI);
                     RotateObjects(objectsToDraw, 0, -rotAngleX, rotAngleY);//rotAngleX rotAngleY, 0);// rotAngleZ);
                     On_MainForm_Paint(null, null);
                     break;
@@ -326,8 +330,8 @@ namespace Modeling.UI.Forms
             Stream writer = new FileStream(path, FileMode.Create);
             try
             {
-                var serializer = new XmlSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
-                serializer.Serialize(writer, shapes);
+                var serializer = new DataContractSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
+                serializer.WriteObject(writer, shapes);
             }
             catch (Exception e)
             {
@@ -345,8 +349,8 @@ namespace Modeling.UI.Forms
             try
             {
                 reader = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Open, FileAccess.Read);
-                var serializer = new XmlSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
-                return (List<BaseShape>)serializer.Deserialize(reader);
+                var serializer = new DataContractSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
+                return (List<BaseShape>)serializer.ReadObject(reader);
             }
             catch (Exception)
             {

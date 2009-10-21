@@ -19,7 +19,7 @@ namespace Modeling.Core.Shapes
             SidesNumber = sidesNumber;
             Radius = radius;
             Height = height;
-            Edges = new List<Edge>();
+            edges = new List<Edge>();
 
             var spikePoint = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
             var angleStep = 2 * Math.PI / SidesNumber;
@@ -33,7 +33,7 @@ namespace Modeling.Core.Shapes
                 // Edges, wich connect pyramids spike and its bottom
                 var v = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
                 var edgeInclinated = new Edge(v, spikePoint);
-                Edges.Add(edgeInclinated);
+                edges.Add(edgeInclinated);
                 // Bottom edges
                 var dxNext = Radius * (float)Math.Cos(angle + angleStep);
                 var dzNext = Radius * (float)Math.Sin(angle + angleStep);
@@ -41,10 +41,10 @@ namespace Modeling.Core.Shapes
                 var vNext = new Point3D(basePoint.X + dxNext, basePoint.Y, basePoint.Z + dzNext);
 
                 var edgeBottom = new Edge(v, vNext);
-                Edges.Add(edgeBottom);
+                edges.Add(edgeBottom);
 
             }
-            previousState = new List<Edge>(Edges);
+            previousState = new List<Edge>(edges);
         }
     }
 }

@@ -70,7 +70,8 @@ namespace Modeling.UI.Forms
             if (scales == null)
                 return;
 
-            objsTree.ScaleSelectedObject(objects3D[0].Edges[0].Vertex1, scales[0], scales[1], scales[2]);
+            CoordinateAxises coorAxises = objects3D[0] as CoordinateAxises;
+            objsTree.ScaleSelectedObject(coorAxises.BasePoint, scales[0], scales[1], scales[2]);
             Owner.Invalidate();
         }
 
@@ -84,7 +85,8 @@ namespace Modeling.UI.Forms
             if (angles.Count == 0)
                 return;
 
-            objsTree.RotateSelectedObject(objects3D[0].Edges[0].Vertex1, angles[0], angles[1], angles[2]);
+            CoordinateAxises coorAxises = objects3D[0] as CoordinateAxises;
+            objsTree.RotateSelectedObject(coorAxises.BasePoint, angles[0], angles[1], angles[2]);
             Owner.Invalidate();
         }
         #endregion
