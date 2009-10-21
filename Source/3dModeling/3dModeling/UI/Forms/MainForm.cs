@@ -9,12 +9,11 @@ namespace Modeling.UI.Forms
     using System;
     using System.Collections.Generic;
     using System.Drawing;
-    using System.IO;
-    using System.Runtime.Serialization;
     using System.Windows.Forms;
     using Core.Elements;
     using Core.Shapes;
     using T = Core.Transformations;
+    using S = Core.Helpers.Serializator;
 
     public partial class MainForm : Form
     {
@@ -27,9 +26,7 @@ namespace Modeling.UI.Forms
         #endregion
 
         #region Fields
-        private readonly List<Type> extraTypes = new List<Type> { typeof(Cone), typeof(Cube), typeof(Pyramid), typeof(CoordinateAxises) };
-        private readonly Point gridStartPoint = new Point(10, 10);
-        private readonly List<PointF> listOfVertexes = new List<PointF>();
+
         private List<BaseShape> objectsToDraw;
         private Point3D basePoint;
         private PointF moveStartPoint;
@@ -68,32 +65,19 @@ namespace Modeling.UI.Forms
         }
         #endregion
 
-        #region Private Methods
-        /// <summary>
-        /// This method draws big red point at specified coordinates
-        /// </summary>
-        /// <param name="BasePoint"></param>
-        private void DrawBasePoint(PointF BasePoint)
-        {
-            Graphics g = CreateGraphics();
-            g.FillEllipse(Brushes.Red, BasePoint.X - 5, BasePoint.Y - 5, 10, 10);
-            g.FillEllipse(Brushes.Green, moveStartPoint.X - 5, moveStartPoint.Y - 5, 10, 10);
-        }
-        #endregion
-
         #region Handling Form Events
         private void On_MainForm_Load(object sender, EventArgs e)
         {
             basePoint = new Point3D((float)Width / 2, (float)Height / 2);
             moveStartPoint = basePoint;
 
-            var cube = new Cube(new Point3D(basePoint.X - 80, basePoint.Y, basePoint.Z), 50);
-            var pyramid = new Pyramid(basePoint, 3, 50, 100);
-            var cone = new Cone(basePoint, 25, -50);
-            var axises = new CoordinateAxises(basePoint);
+            // var cube = new Cube(new Point3D(basePoint.X - 80, basePoint.Y, basePoint.Z), 50);
+            // var pyramid = new Pyramid(basePoint, 3, 50, 100);
+            // var cone = new Cone(basePoint, 25, -50);
+            // var axises = new CoordinateAxises(basePoint);
 
-            //objectsToDraw = new List<BaseShape> { axises, pyramid, cone, cube };
-            objectsToDraw = DeserializeShapes(PATHTO_SERIALIZED_STATE);
+            // objectsToDraw = new List<BaseShape> { axises, pyramid, cone, cube };
+            objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
             SaveObjectsState(objectsToDraw);
         }
 
@@ -251,7 +235,7 @@ namespace Modeling.UI.Forms
         private void On_miSave_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            SerializeShapes(PATHTO_SERIALIZED_STATE, objectsToDraw);
+            S.SerializeShapes(PATHTO_SERIALIZED_STATE, objectsToDraw);
             Cursor.Current = Cursors.Default;
         }
         #endregion
@@ -320,50 +304,6 @@ namespace Modeling.UI.Forms
             foreach (var obj in objsToDraw)
             {
                 obj.SaveState();
-            }
-        }
-        #endregion
-
-        #region Serializtion
-        private void SerializeShapes(string path, List<BaseShape> shapes)
-        {
-            Stream writer = new FileStream(path, FileMode.Create);
-            try
-            {
-                var serializer = new DataContractSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
-                serializer.WriteObject(writer, shapes);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            finally
-            {
-                writer.Close();
-            }
-        }
-
-        private List<BaseShape> DeserializeShapes(string path)
-        {
-            Stream reader = null;
-            try
-            {
-                reader = new FileStream(PATHTO_SERIALIZED_STATE, FileMode.Open, FileAccess.Read);
-                var serializer = new DataContractSerializer(typeof(List<BaseShape>), extraTypes.ToArray());
-                return (List<BaseShape>)serializer.ReadObject(reader);
-            }
-            catch (Exception)
-            {
-                return new List<BaseShape>
-                           {
-                               new CoordinateAxises(basePoint)
-                           };
-
-            }
-            finally
-            {
-                if (reader != null)
-                    reader.Close();
             }
         }
         #endregion

@@ -42,20 +42,20 @@
             // 
             // btnRotate
             // 
-            this.btnRotate.Location = new System.Drawing.Point(113, 84);
+            this.btnRotate.Location = new System.Drawing.Point(146, 79);
             this.btnRotate.Name = "btnRotate";
             this.btnRotate.Size = new System.Drawing.Size(75, 23);
-            this.btnRotate.TabIndex = 0;
+            this.btnRotate.TabIndex = 3;
             this.btnRotate.Text = "Rotate";
             this.btnRotate.UseVisualStyleBackColor = true;
             this.btnRotate.Click += new System.EventHandler(this.On_btnRotate_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(194, 84);
+            this.btnCancel.Location = new System.Drawing.Point(227, 79);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.On_btnCancel_Click);
@@ -81,7 +81,7 @@
             // lblBeta
             // 
             this.lblBeta.AutoSize = true;
-            this.lblBeta.Location = new System.Drawing.Point(95, 38);
+            this.lblBeta.Location = new System.Drawing.Point(110, 38);
             this.lblBeta.Name = "lblBeta";
             this.lblBeta.Size = new System.Drawing.Size(32, 13);
             this.lblBeta.TabIndex = 4;
@@ -90,7 +90,7 @@
             // lblGama
             // 
             this.lblGama.AutoSize = true;
-            this.lblGama.Location = new System.Drawing.Point(173, 38);
+            this.lblGama.Location = new System.Drawing.Point(194, 38);
             this.lblGama.Name = "lblGama";
             this.lblGama.Size = new System.Drawing.Size(38, 13);
             this.lblGama.TabIndex = 5;
@@ -101,27 +101,27 @@
             this.tbAlpha.Location = new System.Drawing.Point(55, 35);
             this.tbAlpha.Name = "tbAlpha";
             this.tbAlpha.Size = new System.Drawing.Size(34, 20);
-            this.tbAlpha.TabIndex = 6;
+            this.tbAlpha.TabIndex = 0;
             // 
             // tbBeta
             // 
-            this.tbBeta.Location = new System.Drawing.Point(133, 35);
+            this.tbBeta.Location = new System.Drawing.Point(148, 35);
             this.tbBeta.Name = "tbBeta";
             this.tbBeta.Size = new System.Drawing.Size(34, 20);
-            this.tbBeta.TabIndex = 7;
+            this.tbBeta.TabIndex = 1;
             // 
             // tbGama
             // 
-            this.tbGama.Location = new System.Drawing.Point(217, 35);
+            this.tbGama.Location = new System.Drawing.Point(238, 35);
             this.tbGama.Name = "tbGama";
             this.tbGama.Size = new System.Drawing.Size(34, 20);
-            this.tbGama.TabIndex = 8;
+            this.tbGama.TabIndex = 2;
             // 
             // RotatePrimitiveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(281, 119);
+            this.ClientSize = new System.Drawing.Size(314, 114);
             this.Controls.Add(this.tbGama);
             this.Controls.Add(this.tbBeta);
             this.Controls.Add(this.tbAlpha);
