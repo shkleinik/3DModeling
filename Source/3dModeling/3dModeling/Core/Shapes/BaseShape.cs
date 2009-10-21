@@ -180,10 +180,21 @@ namespace Modeling.Core.Shapes
         /// <param name="g">Graphics of form where the shape should be rendered.</param>
         public virtual void Draw(Graphics g)
         {
+            var allVertexes = new List<PointF>();
+
             foreach (var edge in edges)
             {
                 g.DrawLine(Pens.Black, edge.Vertex1, edge.Vertex2);
+                var vertex1 = new PointF(edge.Vertex1.X, edge.Vertex1.Y);
+                var vertex2 = new PointF(edge.Vertex2.X, edge.Vertex2.Y);
+                if (!allVertexes.Contains(vertex1))
+                    allVertexes.Add(vertex1);
+                if (!allVertexes.Contains(vertex2))
+                    allVertexes.Add(vertex2);
             }
+
+
+            g.FillPolygon(Brushes.Aqua, allVertexes.ToArray());
 
             previousState = new List<Edge>(edges);
         }
@@ -194,10 +205,20 @@ namespace Modeling.Core.Shapes
         /// <param name="g">Graphics of form where the shape should be rendered.</param>
         public virtual void Erase(Graphics g)
         {
+            var allVertexes = new List<PointF>();
+
             foreach (var edge in previousState)
             {
                 g.DrawLine(Pens.White, edge.Vertex1, edge.Vertex2);
+
+                var vertex1 = new PointF(edge.Vertex1.X, edge.Vertex1.Y);
+                var vertex2 = new PointF(edge.Vertex2.X, edge.Vertex2.Y);
+                if (!allVertexes.Contains(vertex1))
+                    allVertexes.Add(vertex1);
+                if (!allVertexes.Contains(vertex2))
+                    allVertexes.Add(vertex2);
             }
+            g.FillPolygon(Brushes.White, allVertexes.ToArray());
         }
         #endregion
     }

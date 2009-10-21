@@ -42,44 +42,44 @@
             // 
             // btnScale
             // 
-            this.btnScale.Location = new System.Drawing.Point(80, 95);
+            this.btnScale.Location = new System.Drawing.Point(146, 79);
             this.btnScale.Name = "btnScale";
             this.btnScale.Size = new System.Drawing.Size(75, 23);
-            this.btnScale.TabIndex = 0;
+            this.btnScale.TabIndex = 3;
             this.btnScale.Text = "Scale";
             this.btnScale.UseVisualStyleBackColor = true;
             this.btnScale.Click += new System.EventHandler(this.On_btnScale_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(161, 95);
+            this.btnCancel.Location = new System.Drawing.Point(227, 79);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.On_btnCancel_Click);
             // 
             // tbX
             // 
-            this.tbX.Location = new System.Drawing.Point(42, 46);
+            this.tbX.Location = new System.Drawing.Point(63, 40);
             this.tbX.Name = "tbX";
             this.tbX.Size = new System.Drawing.Size(35, 20);
-            this.tbX.TabIndex = 2;
+            this.tbX.TabIndex = 0;
             // 
             // tbY
             // 
-            this.tbY.Location = new System.Drawing.Point(106, 46);
+            this.tbY.Location = new System.Drawing.Point(156, 40);
             this.tbY.Name = "tbY";
             this.tbY.Size = new System.Drawing.Size(35, 20);
-            this.tbY.TabIndex = 3;
+            this.tbY.TabIndex = 1;
             // 
             // tbZ
             // 
-            this.tbZ.Location = new System.Drawing.Point(174, 46);
+            this.tbZ.Location = new System.Drawing.Point(249, 40);
             this.tbZ.Name = "tbZ";
             this.tbZ.Size = new System.Drawing.Size(35, 20);
-            this.tbZ.TabIndex = 4;
+            this.tbZ.TabIndex = 2;
             // 
             // label1
             // 
@@ -93,35 +93,35 @@
             // lblX
             // 
             this.lblX.AutoSize = true;
-            this.lblX.Location = new System.Drawing.Point(16, 49);
+            this.lblX.Location = new System.Drawing.Point(10, 44);
             this.lblX.Name = "lblX";
-            this.lblX.Size = new System.Drawing.Size(20, 13);
+            this.lblX.Size = new System.Drawing.Size(48, 13);
             this.lblX.TabIndex = 6;
-            this.lblX.Text = "X :";
+            this.lblX.Text = "X  scale:";
             // 
             // lblY
             // 
             this.lblY.AutoSize = true;
-            this.lblY.Location = new System.Drawing.Point(80, 49);
+            this.lblY.Location = new System.Drawing.Point(103, 44);
             this.lblY.Name = "lblY";
-            this.lblY.Size = new System.Drawing.Size(20, 13);
+            this.lblY.Size = new System.Drawing.Size(48, 13);
             this.lblY.TabIndex = 7;
-            this.lblY.Text = "Y :";
+            this.lblY.Text = "Y  scale:";
             // 
             // lblZ
             // 
             this.lblZ.AutoSize = true;
-            this.lblZ.Location = new System.Drawing.Point(148, 49);
+            this.lblZ.Location = new System.Drawing.Point(196, 44);
             this.lblZ.Name = "lblZ";
-            this.lblZ.Size = new System.Drawing.Size(20, 13);
+            this.lblZ.Size = new System.Drawing.Size(48, 13);
             this.lblZ.TabIndex = 8;
-            this.lblZ.Text = "Z :";
+            this.lblZ.Text = "Z  scale:";
             // 
             // ScalePrimitiveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(248, 130);
+            this.ClientSize = new System.Drawing.Size(314, 114);
             this.Controls.Add(this.lblZ);
             this.Controls.Add(this.lblY);
             this.Controls.Add(this.lblX);

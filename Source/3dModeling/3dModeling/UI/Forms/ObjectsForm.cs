@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
-using Modeling.Core.Shapes;
-using Modeling.UI.Controls;
-using Modeling.UI.Forms.CreateForms;
-
-namespace Modeling.UI.Forms
+﻿namespace Modeling.UI.Forms
 {
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using Core.Shapes;
+    using Controls;
+    using CreateForms;
+
     public partial class ObjectsForm : Form
     {
         #region Fields
@@ -26,6 +26,7 @@ namespace Modeling.UI.Forms
             objsTree = new ObjectsTree(objects3D);
             objsTree.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             objsTree.Location = new System.Drawing.Point(0, 25);
+            objsTree.ObjectDeleted += On_objsTree_ObjectDeleted;
             Controls.Add(objsTree);
         }
         #endregion
@@ -69,6 +70,8 @@ namespace Modeling.UI.Forms
             (new EditForms.ScalePrimitiveForm(out scales)).ShowDialog();
             if (scales == null)
                 return;
+            if(scales.Count == 0)
+                return;
 
             CoordinateAxises coorAxises = objects3D[0] as CoordinateAxises;
             objsTree.ScaleSelectedObject(coorAxises.BasePoint, scales[0], scales[1], scales[2]);
@@ -87,6 +90,13 @@ namespace Modeling.UI.Forms
 
             CoordinateAxises coorAxises = objects3D[0] as CoordinateAxises;
             objsTree.RotateSelectedObject(coorAxises.BasePoint, angles[0], angles[1], angles[2]);
+            Owner.Invalidate();
+        }
+        #endregion
+
+        #region Events Handling
+        private void On_objsTree_ObjectDeleted()
+        {
             Owner.Invalidate();
         }
         #endregion

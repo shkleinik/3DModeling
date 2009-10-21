@@ -45,7 +45,7 @@
             this.btnMove.Location = new System.Drawing.Point(149, 81);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(75, 23);
-            this.btnMove.TabIndex = 0;
+            this.btnMove.TabIndex = 4;
             this.btnMove.Text = "Move";
             this.btnMove.UseVisualStyleBackColor = true;
             this.btnMove.Click += new System.EventHandler(this.On_btnMove_Click);
@@ -55,7 +55,7 @@
             this.btnCancel.Location = new System.Drawing.Point(230, 81);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
+            this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.On_btnCancel_Click);
@@ -65,7 +65,7 @@
             this.tbdX.Location = new System.Drawing.Point(48, 38);
             this.tbdX.Name = "tbdX";
             this.tbdX.Size = new System.Drawing.Size(37, 20);
-            this.tbdX.TabIndex = 2;
+            this.tbdX.TabIndex = 1;
             // 
             // tbdZ
             // 
@@ -79,7 +79,7 @@
             this.tbdY.Location = new System.Drawing.Point(123, 38);
             this.tbdY.Name = "tbdY";
             this.tbdY.Size = new System.Drawing.Size(37, 20);
-            this.tbdY.TabIndex = 4;
+            this.tbdY.TabIndex = 2;
             // 
             // lblX
             // 
@@ -121,7 +121,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(315, 116);
+            this.ClientSize = new System.Drawing.Size(314, 114);
             this.Controls.Add(this.lblTip);
             this.Controls.Add(this.lblZ);
             this.Controls.Add(this.lblY);

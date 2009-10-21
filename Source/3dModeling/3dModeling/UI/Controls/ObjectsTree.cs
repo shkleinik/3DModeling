@@ -18,6 +18,10 @@ namespace Modeling.UI.Controls
         private List<BaseShape> objects3D;
         #endregion
 
+        #region Events
+        public event MethodInvoker ObjectDeleted;
+        #endregion
+
         #region Constructors
         public ObjectsTree(List<BaseShape> objects3D)
         {
@@ -108,6 +112,7 @@ namespace Modeling.UI.Controls
                     var nodeIndex = trObjects.SelectedNode.Index;
                     trObjects.SelectedNode.Remove();
                     objects3D.RemoveAt(nodeIndex);
+                    ObjectDeleted();
                     break;
             }
         }

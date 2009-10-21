@@ -68,14 +68,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Elements\Side.cs" />
+    <Compile Include="Core\Helpers\Serializator.cs" />
     <Compile Include="Core\Shapes\Cone.cs" />
     <Compile Include="Core\Shapes\CoordinateAxises.cs" />
     <Compile Include="Core\Shapes\Cube.cs" />
     <Compile Include="Core\Elements\Edge.cs" />
-    <Compile Include="Core\Grid.cs" />
     <Compile Include="Core\Shapes\BaseShape.cs" />
     <Compile Include="Core\Elements\Point3D.cs" />
-    <Compile Include="Core\Shapes\Polygon.cs" />
     <Compile Include="Core\Shapes\Pyramid.cs" />
     <Compile Include="Core\Transformations.cs" />
     <Compile Include="UI\Constants.cs" />
