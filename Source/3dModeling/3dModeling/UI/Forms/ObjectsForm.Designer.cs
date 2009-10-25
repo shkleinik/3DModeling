@@ -1,7 +1,4 @@
-﻿//using System.Drawing;
-//using System.Windows.Forms;
-
-namespace Modeling.UI.Forms
+﻿namespace Modeling.UI.Forms
 {
     partial class ObjectsForm
     {
@@ -50,7 +47,7 @@ namespace Modeling.UI.Forms
             this.miEditPrimitives});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(484, 24);
+            this.menu.Size = new System.Drawing.Size(500, 24);
             this.menu.TabIndex = 0;
             this.menu.Text = "Actions with shapes menu";
             // 
@@ -112,11 +109,12 @@ namespace Modeling.UI.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 312);
             this.Controls.Add(this.menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menu;
+            // Incorrect layout using this properties.
             this.MinimumSize = new System.Drawing.Size(500, 350);
+            this.ClientSize = new System.Drawing.Size(500, 350);
             this.Name = "ObjectsForm";
             this.Text = "Constructor tree";
             this.menu.ResumeLayout(false);
