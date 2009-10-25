@@ -1,12 +1,13 @@
-﻿using System;
-using System.Windows.Forms;
-using Modeling.Core.Shapes;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Modeling.Core.Elements;
-
-namespace Modeling.UI.Controls
+﻿namespace Modeling.UI.Controls
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using Core.Shapes;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using Core.Elements;
+
     public partial class ObjectsTree : UserControl
     {
         #region Constatnts
@@ -53,6 +54,7 @@ namespace Modeling.UI.Controls
                 }
                 trObjects.Nodes.Add(newNode);
             }
+            trObjects.Nodes[0].BackColor = Color.LightGray;
         }
 
         public void UpdateTree(List<BaseShape> objects3D)

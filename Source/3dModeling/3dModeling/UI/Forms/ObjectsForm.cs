@@ -25,7 +25,7 @@
         {
             objsTree = new ObjectsTree(objects3D);
             objsTree.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            objsTree.Location = new System.Drawing.Point(0, 25);
+            objsTree.Location = new System.Drawing.Point(-3, 20);
             objsTree.ObjectDeleted += On_objsTree_ObjectDeleted;
             Controls.Add(objsTree);
         }

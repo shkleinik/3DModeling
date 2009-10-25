@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FD53605D-66C4-465D-A3A5-030CF237DAFB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -75,6 +75,7 @@
     <Compile Include="Core\Elements\Edge.cs" />
     <Compile Include="Core\Shapes\BaseShape.cs" />
     <Compile Include="Core\Elements\Point3D.cs" />
+    <Compile Include="Core\Shapes\Cylinder.cs" />
     <Compile Include="Core\Shapes\Pyramid.cs" />
     <Compile Include="Core\Transformations.cs" />
     <Compile Include="UI\Constants.cs" />

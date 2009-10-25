@@ -38,7 +38,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.trObjects.Location = new System.Drawing.Point(4, 4);
             this.trObjects.Name = "trObjects";
-            this.trObjects.Size = new System.Drawing.Size(444, 376);
+            this.trObjects.Size = new System.Drawing.Size(604, 450);
             this.trObjects.TabIndex = 0;
             // 
             // ObjectsTree
@@ -47,13 +47,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.trObjects);
             this.Name = "ObjectsTree";
-            this.Size = new System.Drawing.Size(451, 383);
+            this.Size = new System.Drawing.Size(611, 454);
+            this.Load += new System.EventHandler(this.On_ObjectsTree_Load);
             this.ResumeLayout(false);
 
-            //
-            // ObjectsTree Events
-            //
-            this.Load += new System.EventHandler(this.On_ObjectsTree_Load);
         }
 
         #endregion
