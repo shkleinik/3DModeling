@@ -66,6 +66,7 @@
             this.tbX.Name = "tbX";
             this.tbX.Size = new System.Drawing.Size(35, 20);
             this.tbX.TabIndex = 0;
+            this.tbX.Text = "0";
             // 
             // tbY
             // 
@@ -73,6 +74,7 @@
             this.tbY.Name = "tbY";
             this.tbY.Size = new System.Drawing.Size(35, 20);
             this.tbY.TabIndex = 1;
+            this.tbY.Text = "0";
             // 
             // tbZ
             // 
@@ -80,6 +82,7 @@
             this.tbZ.Name = "tbZ";
             this.tbZ.Size = new System.Drawing.Size(35, 20);
             this.tbZ.TabIndex = 2;
+            this.tbZ.Text = "0";
             // 
             // label1
             // 

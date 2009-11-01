@@ -1,8 +1,16 @@
-﻿using System.Drawing;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Point3D.cs" company="Walash Ltd.">
+//     Copyright (c) Walash Ltd. All rights reserved.
+// </copyright>
+// <author>Pavel Shkleinik</author>
+//-----------------------------------------------------------------------
 
 namespace Modeling.Core.Elements
 {
-    public class Point3D
+    using System;
+    using System.Drawing;
+
+    public class Point3D : IComparable
     {
         #region Properties
         public float X { get; set; }
@@ -39,5 +47,21 @@ namespace Modeling.Core.Elements
         {
             return new PointF(point3D.X, point3D.Y);
         }
+
+        #region IComparable Members
+
+        public int CompareTo(object obj)
+        {
+            if (!(obj is Point3D))
+                throw new ArgumentException("object is not a Point3D");
+
+
+            var otherPoint = (Point3D)obj;
+
+            return X.CompareTo(otherPoint.X) + Y.CompareTo(otherPoint.Y) + Z.CompareTo(otherPoint.Z);
+
+        }
+
+        #endregion
     }
 }

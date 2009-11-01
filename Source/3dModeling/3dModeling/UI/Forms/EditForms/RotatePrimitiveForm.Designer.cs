@@ -102,6 +102,7 @@
             this.tbAlpha.Name = "tbAlpha";
             this.tbAlpha.Size = new System.Drawing.Size(34, 20);
             this.tbAlpha.TabIndex = 0;
+            this.tbAlpha.Text = "0";
             // 
             // tbBeta
             // 
@@ -109,6 +110,7 @@
             this.tbBeta.Name = "tbBeta";
             this.tbBeta.Size = new System.Drawing.Size(34, 20);
             this.tbBeta.TabIndex = 1;
+            this.tbBeta.Text = "0";
             // 
             // tbGama
             // 
@@ -116,6 +118,7 @@
             this.tbGama.Name = "tbGama";
             this.tbGama.Size = new System.Drawing.Size(34, 20);
             this.tbGama.TabIndex = 2;
+            this.tbGama.Text = "0";
             // 
             // RotatePrimitiveForm
             // 

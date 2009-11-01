@@ -66,6 +66,7 @@
             this.tbdX.Name = "tbdX";
             this.tbdX.Size = new System.Drawing.Size(37, 20);
             this.tbdX.TabIndex = 1;
+            this.tbdX.Text = "0";
             // 
             // tbdZ
             // 
@@ -73,6 +74,7 @@
             this.tbdZ.Name = "tbdZ";
             this.tbdZ.Size = new System.Drawing.Size(37, 20);
             this.tbdZ.TabIndex = 3;
+            this.tbdZ.Text = "0";
             // 
             // tbdY
             // 
@@ -80,6 +82,7 @@
             this.tbdY.Name = "tbdY";
             this.tbdY.Size = new System.Drawing.Size(37, 20);
             this.tbdY.TabIndex = 2;
+            this.tbdY.Text = "0";
             // 
             // lblX
             // 

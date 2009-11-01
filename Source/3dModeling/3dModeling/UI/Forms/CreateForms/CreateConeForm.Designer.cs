@@ -99,6 +99,7 @@
             this.tbX.Name = "tbX";
             this.tbX.Size = new System.Drawing.Size(30, 20);
             this.tbX.TabIndex = 3;
+            this.tbX.Text = "0";
             // 
             // lblY
             // 
@@ -115,6 +116,7 @@
             this.tbY.Name = "tbY";
             this.tbY.Size = new System.Drawing.Size(30, 20);
             this.tbY.TabIndex = 4;
+            this.tbY.Text = "0";
             // 
             // lblZ
             // 
@@ -131,6 +133,7 @@
             this.tbZ.Name = "tbZ";
             this.tbZ.Size = new System.Drawing.Size(30, 20);
             this.tbZ.TabIndex = 5;
+            this.tbZ.Text = "0";
             // 
             // btnAdd
             // 

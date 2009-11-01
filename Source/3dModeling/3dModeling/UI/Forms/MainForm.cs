@@ -4,6 +4,7 @@
 // </copyright>
 // <author>Pavel Shkleinik</author>
 //-----------------------------------------------------------------------
+
 namespace Modeling.UI.Forms
 {
     using System;
@@ -12,6 +13,7 @@ namespace Modeling.UI.Forms
     using System.Windows.Forms;
     using Core.Elements;
     using Core.Shapes;
+    using Microsoft.DirectX.Direct3D;
     using T = Core.Transformations;
     using S = Core.Helpers.Serializator;
 
@@ -19,13 +21,15 @@ namespace Modeling.UI.Forms
     {
         #region Constants
         private const int DEFAULT_GRID_STEP = 30;
-        private const int MIN_GRID_STEP = 5;
-        private const int MAX_GRID_STEP = 100;
+        private const int MIN_GRID_STEP = -100;
+        private const int MAX_GRID_STEP = 500;
         private const int SCALE_STEP = 2;
         private const string PATHTO_SERIALIZED_STATE = "Walash.3Dscene";
         #endregion
 
         #region Fields
+
+        private Device device;
 
         private List<BaseShape> objectsToDraw;
         private Point3D basePoint;
@@ -63,11 +67,34 @@ namespace Modeling.UI.Forms
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Initializes DirectX Graphics.
+        /// </summary>
+        public void InitializeDirectX()
+        {
+            try
+            {
+                SetStyle(ControlStyles.Opaque | ControlStyles.AllPaintingInWmPaint, true);
+                UpdateStyles();
+                var presentParams = new PresentParameters();
+                presentParams.Windowed = true;
+                presentParams.SwapEffect = SwapEffect.Discard;
+
+                device = new Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, presentParams);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         #endregion
 
         #region Handling Form Events
         private void On_MainForm_Load(object sender, EventArgs e)
         {
+            InitializeDirectX();
+
             basePoint = new Point3D((float)Width / 2, (float)Height / 2);
             moveStartPoint = basePoint;
 
@@ -75,9 +102,13 @@ namespace Modeling.UI.Forms
             // var pyramid = new Pyramid(basePoint, 3, 50, 100);
             // var cone = new Cone(basePoint, 25, -50);
             // var axises = new CoordinateAxises(basePoint);
+            // var cylinder = new Cylinder(basePoint, 100, 200);
 
-            // objectsToDraw = new List<BaseShape> { axises, pyramid, cone, cube };
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
+            // objectsToDraw.Add(pyramid);
+            // objectsToDraw.Add(cone);
+            // objectsToDraw.Add(cylinder);
+
             SaveObjectsState(objectsToDraw);
         }
 
@@ -88,9 +119,16 @@ namespace Modeling.UI.Forms
 
         private void On_MainForm_Paint(object sender, PaintEventArgs e)
         {
-            EraseObjects(objectsToDraw);
-            DrawObjects(objectsToDraw);
-            //DrawBasePoint(basePoint);
+            if (cbUseDirectX.Checked)
+            {
+                DrawObjectsWithDX(objectsToDraw);
+            }
+            else
+            {
+                EraseObjects(objectsToDraw);
+                DrawObjects(objectsToDraw);
+            }
+            // CreateGraphics().DrawEllipse(Pens.Red, basePoint.X, basePoint.Y, 3F, 3F);
         }
 
         private void On_MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -160,7 +198,7 @@ namespace Modeling.UI.Forms
                     var dynamicAngle = GetZRotateAngle(basePoint, e.Location);
                     var rotAngleZ = dynamicAngle - rotateStartAngle;
                     // Console.WriteLine("angleToRotate = {0:F2}, dynamicAngle  = {1:F2},rotateStartAngle = {2:F2} ", angleToRotate * 180 / Math.PI, dynamicAngle * 180 / Math.PI, rotateStartAngle * 180 / Math.PI);
-                    RotateObjects(objectsToDraw, 0, -rotAngleX, rotAngleY);//rotAngleX rotAngleY, 0);// rotAngleZ);
+                    RotateObjects(objectsToDraw, 0, rotAngleX, rotAngleY);//rotAngleX rotAngleY, 0);// rotAngleZ);
                     On_MainForm_Paint(null, null);
                     break;
                 case MouseButtons.Right:
@@ -229,7 +267,27 @@ namespace Modeling.UI.Forms
             {
                 shape.XZProjection();
             }
+        }
 
+        private void On_miXYintel_Click(object sender, EventArgs e)
+        {
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha + Math.PI / 2, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            On_MainForm_Paint(null, null);
+        }
+
+        private void On_miYZintel_Click(object sender, EventArgs e)
+        {
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta + Math.PI / 2);
+            On_MainForm_Paint(null, null);
+        }
+
+        private void On_miXZintel_Click(object sender, EventArgs e)
+        {
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            On_MainForm_Paint(null, null);
         }
 
         private void On_miSave_Click(object sender, EventArgs e)
@@ -237,6 +295,17 @@ namespace Modeling.UI.Forms
             Cursor.Current = Cursors.WaitCursor;
             S.SerializeShapes(PATHTO_SERIALIZED_STATE, objectsToDraw);
             Cursor.Current = Cursors.Default;
+        }
+
+        private void On_miReload_Click(object sender, EventArgs e)
+        {
+            objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE);
+            On_MainForm_Paint(null, null);
+        }
+
+        private void On_cbUseDirectX_CheckedChanged(object sender, EventArgs e)
+        {
+            On_MainForm_Paint(null, null);
         }
         #endregion
 
@@ -266,6 +335,19 @@ namespace Modeling.UI.Forms
             }
         }
 
+        public void DrawObjectsWithDX(IEnumerable<BaseShape> objsToDraw)
+        {
+            device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
+            device.BeginScene();
+
+            foreach (var obj in objsToDraw)
+            {
+                obj.Draw(device);
+            }
+            device.EndScene();
+            device.Present();
+        }
+
         private void EraseObjects(IEnumerable<BaseShape> objsToDraw)
         {
             foreach (var obj in objsToDraw)
@@ -274,8 +356,11 @@ namespace Modeling.UI.Forms
             }
         }
 
-        private void RotateObjects(IEnumerable<BaseShape> objsToDraw, double rotAngleX, double rotAngleY, double rotAngleZ)
+        private void RotateObjects(IList<BaseShape> objsToDraw, double rotAngleX, double rotAngleY, double rotAngleZ)
         {
+            ((CoordinateAxises)objsToDraw[0]).Alpha += rotAngleY;
+            ((CoordinateAxises)objsToDraw[0]).Beta += rotAngleZ;
+
             foreach (var obj in objsToDraw)
             {
                 obj.Rotate(basePoint, rotAngleX, rotAngleY, rotAngleZ);

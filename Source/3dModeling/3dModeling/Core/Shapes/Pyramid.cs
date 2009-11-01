@@ -32,34 +32,53 @@ namespace Modeling.Core.Shapes
             SidesNumber = sidesNumber;
             Radius = radius;
             Height = height;
-            edges = new List<Edge>();
 
-            var spikePoint = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
+            var spikeVertex = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
             var angleStep = 2 * Math.PI / SidesNumber;
             double angle = 0;
+
+            var bottomEdges = new List<Edge>();
             for (var i = 0; i < SidesNumber; i++)
             {
+                var inclinatedSide = new Side();
+
                 angle += angleStep;
 
                 var dx = Radius * (float)Math.Cos(angle);
                 var dz = Radius * (float)Math.Sin(angle);
 
-                // Edges, wich connect pyramids spike and its bottom
-                var v = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
-                var edgeInclinated = new Edge(v, spikePoint);
-                edges.Add(edgeInclinated);
+                //      /\
+                //      --
+                var bottomVertex = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
+                var inclinatedEdge = new Edge(bottomVertex, spikeVertex);
 
-                // Bottom edges
                 var nextDX = Radius * (float)Math.Cos(angle + angleStep);
                 var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
 
-                var nextVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+                var nextBottomVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+                var nextInclinatedEdge = new Edge(nextBottomVertex, spikeVertex);
 
-                var edgeBottom = new Edge(v, nextVertex);
-                edges.Add(edgeBottom);
+                var bottomEdge = new Edge(bottomVertex, nextBottomVertex);
+
+                inclinatedSide.Edges.Add(inclinatedEdge);
+                inclinatedSide.Edges.Add(nextInclinatedEdge);
+                inclinatedSide.Edges.Add(bottomEdge);
+
+                if (!bottomEdges.Contains(bottomEdge))
+                {
+                    bottomEdges.Add(bottomEdge);
+                }
+
+                if (!sides.Contains(inclinatedSide))
+                {
+                    sides.Add(inclinatedSide);
+                }
             }
 
-            previousState = new List<Edge>(edges);
+            var bottomSide = new Side();
+            bottomSide.Edges.AddRange(bottomEdges);
+
+            previousState = new List<Side>(sides);
         }
 
         /// <summary>

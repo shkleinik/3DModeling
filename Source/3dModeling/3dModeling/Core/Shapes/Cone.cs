@@ -4,7 +4,7 @@ namespace Modeling.Core.Shapes
 {
     public class Cone : Pyramid
     {
-        private const int ApporximationLevel = 15;
+        private const int ApporximationLevel = 50;
 
         private Cone() {}
 

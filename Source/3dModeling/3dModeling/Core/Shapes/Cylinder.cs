@@ -8,54 +8,67 @@
     {
         public int EdgeLength { get; set; }
 
+        /// <summary>
+        /// Initializes new instance of the <see cref="Cylinder"/> class.  Parametless constructor is required for normal serialization.
+        /// </summary>
         private Cylinder() { }
 
         /// <summary>
-        /// Constructor for cube
+        /// Constructor for cylinder
         /// </summary>
-        /// <param name="basePoint">It is bottom, left and closest pint of cube</param>
-        /// <param name="radius">The length of one of the edges</param>
+        /// <param name="basePoint">It is bottom center point.</param>
+        /// <param name="radius">The radius of bottom or top circle.</param>
         /// <param name="height">Cylinder height.</param>
         public Cylinder(Point3D basePoint, float radius, float height)
         {
-
             SidesNumber = APPORXIMATION_LEVEL;
             Radius = radius;
             Height = height;
-            edges = new List<Edge>();
 
-            var spikePoint = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
+            // var spikePoint = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
             var angleStep = 2 * Math.PI / SidesNumber;
             double angle = 0;
+
+            var bottomEdges = new List<Edge>();
+            var topEdges = new List<Edge>();
+
             for (var i = 0; i < SidesNumber; i++)
             {
-                angle += angleStep;
+                var edges = new List<Edge>();
 
+                angle += angleStep;
                 var dx = Radius * (float)Math.Cos(angle);
                 var dz = Radius * (float)Math.Sin(angle);
-
-                // Edges, wich connect pyramids spike and its bottom
-                var v = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
-                var edgeInclinated = new Edge(v, new Point3D(v.X, v.Y + Height, v.Z));
-                edges.Add(edgeInclinated);
-
-                // Bottom edges
                 var nextDX = Radius * (float)Math.Cos(angle + angleStep);
                 var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
 
-                var nextVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+                // Edges, wich connect cylinder's top and bottom
+                var bottomVertex = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
+                var nextBottomVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
 
-                var edgeBottom = new Edge(v, nextVertex);
+                var topVertex = new Point3D(bottomVertex.X, bottomVertex.Y + Height, bottomVertex.Z);
+                var nextTopVertex = new Point3D(nextBottomVertex.X, nextBottomVertex.Y + Height, nextBottomVertex.Z);
+
+                var edgeVertical = new Edge(bottomVertex, topVertex);
+                var edgeNextVertical = new Edge(nextBottomVertex, nextTopVertex);
+                edges.Add(edgeVertical);
+                edges.Add(edgeNextVertical);
+
+                // Bottom edges
+                var edgeBottom = new Edge(bottomVertex, nextBottomVertex);
                 edges.Add(edgeBottom);
+                bottomEdges.Add(edgeBottom);
 
-                // Top edges 
-                var edgeTop = new Edge(new Point3D(v.X, v.Y + Height, v.Z), new Point3D(nextVertex.X, nextVertex.Y + Height, nextVertex.Z));
+                // Top edges
+                var edgeTop = new Edge(topVertex, nextTopVertex);
                 edges.Add(edgeTop);
+                topEdges.Add(edgeTop);
 
+                sides.Add(new Side{Edges = edges});
             }
 
-            previousState = new List<Edge>(edges);
-
+            sides.Add(new Side{Edges = bottomEdges});
+            sides.Add(new Side{Edges = topEdges});
         }
 
         #region Properties
@@ -76,7 +89,7 @@
         #endregion
 
         #region Constants
-        private const int APPORXIMATION_LEVEL = 25;
+        private const int APPORXIMATION_LEVEL = 50;
         #endregion
     }
 }
