@@ -10,48 +10,43 @@
   <Class Name="Modeling.Core.Elements.Point3D" Collapsed="true">
     <Position X="11.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAYAE=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAABAAAAAAAAAAAAAYAE=</HashCode>
       <FileName>Core\Elements\Point3D.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="Modeling.Core.Elements.Side" Collapsed="true">
     <Position X="9.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>Core\Elements\Side.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Modeling.Core.Transformations" Collapsed="true">
     <Position X="14.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAWACAQAAAQAACBAIAARCAAIIAQABAAMAAAQAAAAA=</HashCode>
+      <HashCode>ACBAWACAQAAAQCACBAIAARCAAIIAQABAAMBAAQAAAAA=</HashCode>
       <FileName>Core\Transformations.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Modeling.Core.Shapes.BaseShape" Collapsed="true">
     <Position X="3.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AgAAAAAABIAAAgAABAIAAAAAGAAIQAAACIAAAAAAAAA=</HashCode>
+      <HashCode>AgAQAACABIAAAgAABIIAAAAAGAEIQAAAAIAAAAAAAAA=</HashCode>
       <FileName>Core\Shapes\BaseShape.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Modeling.Core.Shapes.Cone" Collapsed="true">
-    <Position X="3.75" Y="3.25" Width="1.5" />
-    <InheritanceLine Type="Modeling.Core.Shapes.Pyramid" FixedToPoint="true">
-      <Path>
-        <Point X="4.5" Y="2.441" />
-        <Point X="4.5" Y="3.25" />
-      </Path>
-    </InheritanceLine>
+    <Position X="4.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Core\Shapes\Cone.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Modeling.Core.Shapes.CoordinateAxises" Collapsed="true">
-    <Position X="7.25" Y="1.75" Width="1.5" />
+    <Position X="6.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAEAAAAAAAgAAAAIAAAAACAAAAAAAAAAIAAAAAAA=</HashCode>
+      <HashCode>AgAAAEAAAAAAAgAAAAIAAAAACAAAAAAAAAAIAAAAAAA=</HashCode>
       <FileName>Core\Shapes\CoordinateAxises.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -63,7 +58,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Modeling.Core.Shapes.Pyramid" Collapsed="true">
-    <Position X="3.75" Y="1.75" Width="1.5" />
+    <Position X="4.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAIAAgABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Core\Shapes\Pyramid.cs</FileName>
@@ -92,7 +87,7 @@
   <Class Name="Modeling.UI.Forms.MainForm" Collapsed="true">
     <Position X="11" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gWABACEEAGAAEBAQFEPEBgAKAgAQAAAXgFDQYpoQCAA=</HashCode>
+      <HashCode>geABACECAGAAABAQFEPEAgAKAgAQAAgXgNDQYpAQCAA=</HashCode>
       <FileName>UI\Forms\MainForm.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -101,6 +96,13 @@
     <TypeIdentifier>
       <HashCode>AAAAEACAAmAABAAQBCCAAAhCAAAAAAAAgIACAAMAAAA=</HashCode>
       <FileName>UI\Forms\ObjectsForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Modeling.Core.Shapes.Cylinder" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAgABAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Shapes\Cylinder.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

@@ -92,6 +92,7 @@
             this.tbX.Name = "tbX";
             this.tbX.Size = new System.Drawing.Size(30, 20);
             this.tbX.TabIndex = 4;
+            this.tbX.Text = "0";
             // 
             // tbY
             // 
@@ -99,6 +100,7 @@
             this.tbY.Name = "tbY";
             this.tbY.Size = new System.Drawing.Size(30, 20);
             this.tbY.TabIndex = 5;
+            this.tbY.Text = "0";
             // 
             // tbZ
             // 
@@ -106,6 +108,7 @@
             this.tbZ.Name = "tbZ";
             this.tbZ.Size = new System.Drawing.Size(30, 20);
             this.tbZ.TabIndex = 6;
+            this.tbZ.Text = "0";
             // 
             // btnAdd
             // 
@@ -149,9 +152,9 @@
             this.lblSidesNumber.AutoSize = true;
             this.lblSidesNumber.Location = new System.Drawing.Point(12, 67);
             this.lblSidesNumber.Name = "lblSidesNumber";
-            this.lblSidesNumber.Size = new System.Drawing.Size(69, 13);
+            this.lblSidesNumber.Size = new System.Drawing.Size(74, 13);
             this.lblSidesNumber.TabIndex = 12;
-            this.lblSidesNumber.Text = "Side number:";
+            this.lblSidesNumber.Text = "Sides number:";
             // 
             // tbSidesNumber
             // 
