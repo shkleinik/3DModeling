@@ -9,7 +9,6 @@ using Microsoft.DirectX.Direct3D;
 
 namespace Modeling.Core.Shapes
 {
-    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Runtime.Serialization;

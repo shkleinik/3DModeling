@@ -22,7 +22,7 @@ namespace Modeling.Core.Helpers
         /// <summary>
         /// Collection of types derived from BaseShape.
         /// </summary>
-        private static readonly List<Type> extraTypes = new List<Type> { typeof(Cone), typeof(Cube), typeof(Pyramid), typeof(CoordinateAxises), typeof(Cylinder) };
+        private static readonly List<Type> extraTypes = new List<Type> { typeof(Cone), typeof(Cube), typeof(Pyramid), typeof(CoordinateAxises), typeof(Cylinder), typeof(Prizm) };
 
         /// <summary>
         /// Serialize collection of shapes.

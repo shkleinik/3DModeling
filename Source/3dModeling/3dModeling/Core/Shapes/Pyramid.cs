@@ -20,11 +20,11 @@ namespace Modeling.Core.Shapes
         /// <summary>
         /// Initializes a new instance of the <see cref="Pyramid"/> class. Use this class to create new instances.
         /// </summary>
-        /// <param name="basePoint">Specifies the basepoint from what the pyramid will be built</param>
+        /// <param name="basePoint">Specifies the basepoint from what the pyramid will be built.</param>
         /// <remarks>
         /// Center of the bottom circumscribing circle.
         /// </remarks>
-        /// <param name="sidesNumber">Specifies number of puramids sides.</param>
+        /// <param name="sidesNumber">Specifies number of pyramid's sides.</param>
         /// <param name="radius">Specifies radius of pyramids circumscribing circle.</param>
         /// <param name="height">Specifies pyramids height.</param>
         public Pyramid(Point3D basePoint, int sidesNumber, float radius, float height)
@@ -37,46 +37,46 @@ namespace Modeling.Core.Shapes
             var angleStep = 2 * Math.PI / SidesNumber;
             double angle = 0;
 
-            var bottomEdges = new List<Edge>();
             for (var i = 0; i < SidesNumber; i++)
             {
                 var inclinatedSide = new Side();
-
+                var bottomSide = new Side();
                 angle += angleStep;
 
                 var dx = Radius * (float)Math.Cos(angle);
                 var dz = Radius * (float)Math.Sin(angle);
+                var nextDX = Radius * (float)Math.Cos(angle + angleStep);
+                var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
 
                 //      /\
                 //      --
                 var bottomVertex = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
-                var inclinatedEdge = new Edge(bottomVertex, spikeVertex);
-
-                var nextDX = Radius * (float)Math.Cos(angle + angleStep);
-                var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
-
                 var nextBottomVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+
+                var inclinatedEdge = new Edge(bottomVertex, spikeVertex);
                 var nextInclinatedEdge = new Edge(nextBottomVertex, spikeVertex);
 
                 var bottomEdge = new Edge(bottomVertex, nextBottomVertex);
+                var bottomEdge2 = new Edge(bottomVertex, basePoint);
+                var bottomEdge3 = new Edge(nextBottomVertex, basePoint);
+
+                bottomSide.Edges.Add(bottomEdge);
+                bottomSide.Edges.Add(bottomEdge2);
+                bottomSide.Edges.Add(bottomEdge3);
 
                 inclinatedSide.Edges.Add(inclinatedEdge);
                 inclinatedSide.Edges.Add(nextInclinatedEdge);
                 inclinatedSide.Edges.Add(bottomEdge);
 
-                if (!bottomEdges.Contains(bottomEdge))
-                {
-                    bottomEdges.Add(bottomEdge);
-                }
-
                 if (!sides.Contains(inclinatedSide))
                 {
                     sides.Add(inclinatedSide);
                 }
+                if(!sides.Contains(bottomSide))
+                {
+                    sides.Add(bottomSide);
+                }
             }
-
-            var bottomSide = new Side();
-            bottomSide.Edges.AddRange(bottomEdges);
 
             previousState = new List<Side>(sides);
         }

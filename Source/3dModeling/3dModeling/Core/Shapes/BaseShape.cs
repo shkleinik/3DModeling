@@ -205,6 +205,7 @@ namespace Modeling.Core.Shapes
         public virtual void Draw(Device device)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
+            device.SetRenderState(RenderStates.ZEnable, false);
 
             foreach (var side in sides)
             {
