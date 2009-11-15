@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.miObjectsToRender = new System.Windows.Forms.ToolStripMenuItem();
             this.miProjections = new System.Windows.Forms.ToolStripMenuItem();
             this.miXY = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,21 +41,20 @@
             this.miSave = new System.Windows.Forms.ToolStripMenuItem();
             this.miReload = new System.Windows.Forms.ToolStripMenuItem();
             this.cbUseDirectX = new System.Windows.Forms.CheckBox();
-            this.menuStrip1.SuspendLayout();
+            this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // mainMenu
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miObjectsToRender,
             this.miProjections,
             this.miSave,
             this.miReload});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(818, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "mainMenu";
+            this.mainMenu.Location = new System.Drawing.Point(0, 0);
+            this.mainMenu.Name = "mainMenu";
+            this.mainMenu.Size = new System.Drawing.Size(818, 24);
+            this.mainMenu.TabIndex = 0;
             // 
             // miObjectsToRender
             // 
@@ -80,42 +79,42 @@
             // miXY
             // 
             this.miXY.Name = "miXY";
-            this.miXY.Size = new System.Drawing.Size(152, 22);
+            this.miXY.Size = new System.Drawing.Size(119, 22);
             this.miXY.Text = "XY";
             this.miXY.Click += new System.EventHandler(this.On_miXY_Click);
             // 
             // miYZ
             // 
             this.miYZ.Name = "miYZ";
-            this.miYZ.Size = new System.Drawing.Size(152, 22);
+            this.miYZ.Size = new System.Drawing.Size(119, 22);
             this.miYZ.Text = "YZ";
             this.miYZ.Click += new System.EventHandler(this.On_miYZ_Click);
             // 
             // miXZ
             // 
             this.miXZ.Name = "miXZ";
-            this.miXZ.Size = new System.Drawing.Size(152, 22);
+            this.miXZ.Size = new System.Drawing.Size(119, 22);
             this.miXZ.Text = "XZ";
             this.miXZ.Click += new System.EventHandler(this.On_miXZ_Click);
             // 
             // miXYintel
             // 
             this.miXYintel.Name = "miXYintel";
-            this.miXYintel.Size = new System.Drawing.Size(152, 22);
+            this.miXYintel.Size = new System.Drawing.Size(119, 22);
             this.miXYintel.Text = "XY(intel)";
             this.miXYintel.Click += new System.EventHandler(this.On_miXYintel_Click);
             // 
             // miYZintel
             // 
             this.miYZintel.Name = "miYZintel";
-            this.miYZintel.Size = new System.Drawing.Size(152, 22);
+            this.miYZintel.Size = new System.Drawing.Size(119, 22);
             this.miYZintel.Text = "YZ(intel)";
             this.miYZintel.Click += new System.EventHandler(this.On_miYZintel_Click);
             // 
             // miXZintel
             // 
             this.miXZintel.Name = "miXZintel";
-            this.miXZintel.Size = new System.Drawing.Size(152, 22);
+            this.miXZintel.Size = new System.Drawing.Size(119, 22);
             this.miXZintel.Text = "XZ(intel)";
             this.miXZintel.Click += new System.EventHandler(this.On_miXZintel_Click);
             // 
@@ -154,9 +153,9 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(818, 540);
             this.Controls.Add(this.cbUseDirectX);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.mainMenu;
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "MainForm";
             this.Text = "Walash SoftWare";
@@ -171,15 +170,15 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.On_MainForm_Closing);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.On_MainForm_MouseMove);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.On_MainForm_KeyDown);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.mainMenu.ResumeLayout(false);
+            this.mainMenu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem miObjectsToRender;
         private System.Windows.Forms.ToolStripMenuItem miProjections;
         private System.Windows.Forms.ToolStripMenuItem miXY;

@@ -94,7 +94,7 @@
             this.lblGama.Name = "lblGama";
             this.lblGama.Size = new System.Drawing.Size(38, 13);
             this.lblGama.TabIndex = 5;
-            this.lblGama.Text = "Gama:";
+            this.lblGama.Text = "Gamma:";
             // 
             // tbAlpha
             // 

@@ -117,30 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="mainMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAIAEBAQAAAABAAoAQAAJgAAACAgEAAAAAQA6AIAAE4BAAAoAAAAEAAAACAAAAABAAQAAAAAAIAA
-        AAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAgAAAgAAAAICAAIAAAACAAIAAgIAAAICAgADAwMAAAAD/AAD/
-        AAAA//8A/wAAAP8A/wD//wAA////AP/////////////8///P//////z//8//////zP//zP/////M///M
-        /////8z//8z////8zM/8zM////zPz/z8z///zP/MzP/M///M/8zM/8z//M///M///M/8z//8z//8z/zP
-        //zP//zP/P///////8/8////////z/z////////PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgAAAAgAAAAQAAAAAEABAAAAAAAAAIAAAAA
-        AAAAAAAAEAAAABAAAAAAAAAAAACAAACAAAAAgIAAgAAAAIAAgACAgAAAgICAAMDAwAAAAP8AAP8AAAD/
-        /wD/AAAA/wD/AP//AAD///8A/////////////////////////////P/////P//////////////z/////
-        z//////////////M/////8z/////////////zP/////M/////////////8z/////zP////////////zM
-        /////8zP///////////MzP/////MzP//////////zMz/////zMz//////////8zM/////8zM////////
-        ///MzP/////MzP//////////zMz/////zMz/////////zMzMzP//zMzMzP///////8zMzMz//8zMzMz/
-        ///////MzP/M///M/8zM////////zMz/zP//zP/MzP//////zMz//8zMzMz//8zM/////8zM///MzMzM
-        ///MzP/////MzP//zMzMzP//zMz/////zM////zMzM////zM/////Mz/////zMz/////zM////zM////
-        /8zM/////8zP///MzP/////MzP/////MzP//zMz/////zMz/////zMz//8zM/////8zM/////8zM///M
-        z//////8z//////8zP//zP///////////////8z//8z////////////////M///P////////////////
-        /P//z/////////////////z///////////////////////////////////////////8AAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
-</value>
-  </data>
 </root>

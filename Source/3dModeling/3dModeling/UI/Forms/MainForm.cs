@@ -11,11 +11,13 @@ namespace Modeling.UI.Forms
     using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
+    using Controls;
     using Core.Elements;
     using Core.Shapes;
     using Microsoft.DirectX.Direct3D;
-    using T = Core.Transformations;
     using S = Core.Helpers.Serializator;
+    using T = Core.Transformations;
+    using Microsoft.DirectX.PrivateImplementationDetails;
 
     public partial class MainForm : Form
     {
@@ -39,6 +41,7 @@ namespace Modeling.UI.Forms
         private int gridStep = DEFAULT_GRID_STEP;
         private bool allowScale = true;
         private bool isControlPressed;
+        private AnglesTracker at;
 
         #endregion
 
@@ -98,18 +101,27 @@ namespace Modeling.UI.Forms
             basePoint = new Point3D((float)Width / 2, (float)Height / 2);
             moveStartPoint = basePoint;
 
-            // var cube = new Cube(new Point3D(basePoint.X - 80, basePoint.Y, basePoint.Z), 50);
+            var cube = new Cube(new Point3D(basePoint.X, basePoint.Y, basePoint.Z), 200);
             // var pyramid = new Pyramid(basePoint, 3, 50, 100);
             // var cone = new Cone(basePoint, 25, -50);
             // var axises = new CoordinateAxises(basePoint);
-            // var cylinder = new Cylinder(basePoint, 100, 200);
+            var cylinder = new Cylinder(basePoint, 100, -200);
+            //var prizm = new Prizm(basePoint, 4, (float) (200 / Math.Sqrt(2.0F)), -200);
 
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
             // objectsToDraw.Add(pyramid);
             // objectsToDraw.Add(cone);
-            // objectsToDraw.Add(cylinder);
+            objectsToDraw.Add(cylinder);
+            objectsToDraw.Add(cube);
 
             SaveObjectsState(objectsToDraw);
+
+            at = new AnglesTracker
+                     {
+                         Anchor = (AnchorStyles.Bottom | AnchorStyles.Left)
+                     };
+            at.Location = new Point(0, Height - at.Height - 30);
+            Controls.Add(at);
         }
 
         private void On_MainForm_Closing(object sender, FormClosingEventArgs e)
@@ -161,7 +173,7 @@ namespace Modeling.UI.Forms
                 case MouseButtons.Left:
                     break;
                 case MouseButtons.Right:
-                    basePoint = new Point3D(e.Location);
+                    //basePoint = new Point3D(e.Location);
                     break;
                 default:
                     break;
@@ -251,6 +263,7 @@ namespace Modeling.UI.Forms
             {
                 shape.XYProjection();
             }
+            On_MainForm_Paint(null, null);
         }
 
         private void On_miYZ_Click(object sender, EventArgs e)
@@ -259,6 +272,7 @@ namespace Modeling.UI.Forms
             {
                 shape.YZProjection();
             }
+            On_MainForm_Paint(null, null);
         }
 
         private void On_miXZ_Click(object sender, EventArgs e)
@@ -267,25 +281,30 @@ namespace Modeling.UI.Forms
             {
                 shape.XZProjection();
             }
+            On_MainForm_Paint(null, null);
         }
 
         private void On_miXYintel_Click(object sender, EventArgs e)
         {
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha + Math.PI / 2, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha + Math.PI / 2, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            RotateObjects(objectsToDraw, 0, Math.PI / 2, 0);
             On_MainForm_Paint(null, null);
         }
 
         private void On_miYZintel_Click(object sender, EventArgs e)
         {
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta + Math.PI / 2);
+            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta + Math.PI / 2);
+            RotateObjects(objectsToDraw, 0, 0, Math.PI / 2);
             On_MainForm_Paint(null, null);
         }
 
         private void On_miXZintel_Click(object sender, EventArgs e)
         {
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
+            basePoint = ((CoordinateAxises)objectsToDraw[0]).BasePoint;
+            SaveObjectsState(objectsToDraw);
+            // RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
             RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
             On_MainForm_Paint(null, null);
         }
@@ -358,8 +377,19 @@ namespace Modeling.UI.Forms
 
         private void RotateObjects(IList<BaseShape> objsToDraw, double rotAngleX, double rotAngleY, double rotAngleZ)
         {
+            var g = CreateGraphics();
+            g.DrawString(String.Format("Alpha   : {0}", ((CoordinateAxises)objectsToDraw[0]).Alpha), Font, Brushes.White, 10, Height - 100);
+            g.DrawString(String.Format("Beta    : {0}", ((CoordinateAxises)objectsToDraw[0]).Beta), Font, Brushes.White, 10, Height - 90);
+
             ((CoordinateAxises)objsToDraw[0]).Alpha += rotAngleY;
             ((CoordinateAxises)objsToDraw[0]).Beta += rotAngleZ;
+
+            at.Alpha = ((CoordinateAxises)objsToDraw[0]).Alpha.ToString();
+            at.Beta = ((CoordinateAxises)objsToDraw[0]).Beta.ToString();
+
+
+            g.DrawString(String.Format("Alpha   : {0}", ((CoordinateAxises)objectsToDraw[0]).Alpha), Font, Brushes.Black, 10, Height - 100);
+            g.DrawString(String.Format("Beta    : {0}", ((CoordinateAxises)objectsToDraw[0]).Beta), Font, Brushes.Black, 10, Height - 90);
 
             foreach (var obj in objsToDraw)
             {
@@ -373,7 +403,6 @@ namespace Modeling.UI.Forms
             {
                 obj.Scale(basePoint, scale);
             }
-
         }
 
         private static void MoveObjects(IEnumerable<BaseShape> objsToDraw, float dX, float dY, float dZ)
