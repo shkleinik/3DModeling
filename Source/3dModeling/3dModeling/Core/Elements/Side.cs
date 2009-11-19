@@ -61,19 +61,25 @@ namespace Modeling.Core.Elements
 
                     if (!isV2InCollection)
                         vertexes.Add(edge.Vertex2);
-
-                    //if (!vertexes.Contains(edge.Vertex1))
-                    //{
-                    //    vertexes.Add(edge.Vertex1);
-                    //}
-
-                    //if (!vertexes.Contains(edge.Vertex2))
-                    //{
-                    //    vertexes.Add(edge.Vertex2);
-                    //}
                 }
 
                 return vertexes;
+            }
+        }
+
+        public float Depth
+        {
+            get
+            {
+                var verteces = Vertexes;
+                float cumulativeDepth = 0;
+
+                foreach (var vertex in verteces)
+                {
+                    cumulativeDepth += vertex.Z;
+                }
+
+                return cumulativeDepth/verteces.Count;
             }
         }
         #endregion

@@ -32,7 +32,7 @@ namespace Modeling.Core.Shapes
         /// Collection of sides for current shape.
         /// </summary>
         [DataMember]
-        protected List<Side> sides;
+        public List<Side> sides;
         /// <summary>
         /// State of the shape before transformation. Is used to visualize continious transformation.
         /// Here we save our state after mouse down and store it until mouse up. All dynamic transformations 
@@ -46,7 +46,7 @@ namespace Modeling.Core.Shapes
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseShape"></see> class. Not used directly only from derived classes.
         /// </summary>
-        protected BaseShape()
+        public BaseShape()
         {
             //edges = new List<Edge>();
             sides = new List<Side>();
@@ -173,7 +173,6 @@ namespace Modeling.Core.Shapes
         /// </summary>
         public virtual void SaveState()
         {
-            //initialEdges = new List<Edge>(edges.ToArray());
             initialSides = new List<Side>(sides.ToArray());
         }
 
@@ -186,13 +185,11 @@ namespace Modeling.Core.Shapes
         {
             foreach (var side in sides)
             {
-                //if (side.Vertexes[0].X < side.Vertexes[1].X || side.Vertexes[0].Z < 0)
-                //    continue;
-
-                g.FillPolygon(Brushes.BlueViolet, ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
                 if (side.Vertexes.Count < 2)
                     continue;
                 g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
+
+                g.FillPolygon(Brushes.BlueViolet, ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
             }
 
             previousState = new List<Side>(sides);
@@ -209,11 +206,11 @@ namespace Modeling.Core.Shapes
 
             foreach (var side in sides)
             {
-                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side));
                 foreach (var edge in side.Edges)
                 {
                     device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(edge, Color.Black));
                 }
+                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side));
             }
         }
 

@@ -34,6 +34,7 @@ namespace Modeling.UI.Forms
         private Device device;
 
         private List<BaseShape> objectsToDraw;
+        private BaseShape polyShape;
         private Point3D basePoint;
         private PointF moveStartPoint;
         private double rotateStartAngle;
@@ -99,6 +100,7 @@ namespace Modeling.UI.Forms
             InitializeDirectX();
 
             basePoint = new Point3D((float)Width / 2, (float)Height / 2);
+            polyShape = new BaseShape();
             moveStartPoint = basePoint;
 
             var cube = new Cube(new Point3D(basePoint.X, basePoint.Y, basePoint.Z), 200);
@@ -133,12 +135,27 @@ namespace Modeling.UI.Forms
         {
             if (cbUseDirectX.Checked)
             {
-                DrawObjectsWithDX(objectsToDraw);
+                if (cbHideEdges.Checked)
+                {
+                    DrawObjectsWithDXWithoutHiddenEdges(objectsToDraw);
+                }
+                else
+                {
+                    DrawObjectsWithDX(objectsToDraw);
+                }
             }
             else
             {
-                EraseObjects(objectsToDraw);
-                DrawObjects(objectsToDraw);
+                if (cbHideEdges.Checked)
+                {
+                    polyShape.Erase(CreateGraphics());
+                    DrawObjectsWithoutHiddenEdges();
+                }
+                else
+                {
+                    EraseObjects(objectsToDraw);
+                    DrawObjects(objectsToDraw);
+                }
             }
             // CreateGraphics().DrawEllipse(Pens.Red, basePoint.X, basePoint.Y, 3F, 3F);
         }
@@ -326,6 +343,12 @@ namespace Modeling.UI.Forms
         {
             On_MainForm_Paint(null, null);
         }
+
+        private void On_cbHideEdges_CheckedChanged(object sender, EventArgs e)
+        {
+            ReInitPolyShape();
+        }
+
         #endregion
 
         #region Actions with objects
@@ -354,6 +377,12 @@ namespace Modeling.UI.Forms
             }
         }
 
+        private void DrawObjectsWithoutHiddenEdges()
+        {
+            ReInitPolyShape();
+            polyShape.Draw(CreateGraphics());
+        }
+
         public void DrawObjectsWithDX(IEnumerable<BaseShape> objsToDraw)
         {
             device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
@@ -363,6 +392,28 @@ namespace Modeling.UI.Forms
             {
                 obj.Draw(device);
             }
+            device.EndScene();
+            device.Present();
+        }
+
+        public void DrawObjectsWithDXWithoutHiddenEdges(List<BaseShape> objsToDraw)
+        {
+            var allSides = new List<Side>();
+
+            foreach (var obj in objsToDraw)
+            {
+                allSides.AddRange(obj.sides);
+            }
+
+            allSides.Sort(CompareSidesByDepth);
+
+            var polyShape = new BaseShape{sides = allSides};
+
+            device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
+            device.BeginScene();
+
+            polyShape.Draw(device);
+
             device.EndScene();
             device.Present();
         }
@@ -421,5 +472,55 @@ namespace Modeling.UI.Forms
             }
         }
         #endregion
+
+        private void ReInitPolyShape()
+        {
+            var allSides = new List<Side>();
+
+            foreach (var obj in objectsToDraw)
+            {
+                allSides.AddRange(obj.sides);
+            }
+
+            allSides.Sort(CompareSidesByDepth);
+
+            polyShape = new BaseShape { sides = allSides };
+        }
+
+        private static int CompareSidesByDepth(Side one, Side two)
+        {
+            if (one == null)
+            {
+                if (two == null)
+                {
+                    // If one is null and two is null, they're
+                    // equal. 
+                    return 0;
+                }
+                else
+                {
+                    // If one is null and two is not null, two
+                    // is greater. 
+                    return -1;
+                }
+            }
+            else
+            {
+                // If one is not null...
+                //
+                if (two == null)
+                // ...and two is null, one is greater.
+                {
+                    return 1;
+                }
+                else
+                {
+                    // ...and two is not null, compare the 
+                    // lengths of the two strings.
+                    //
+                    return one.Depth.CompareTo(two.Depth);
+                }
+            }
+        }
     }
 }

@@ -41,6 +41,7 @@
             this.miSave = new System.Windows.Forms.ToolStripMenuItem();
             this.miReload = new System.Windows.Forms.ToolStripMenuItem();
             this.cbUseDirectX = new System.Windows.Forms.CheckBox();
+            this.cbHideEdges = new System.Windows.Forms.CheckBox();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -146,12 +147,27 @@
             this.cbUseDirectX.UseVisualStyleBackColor = true;
             this.cbUseDirectX.CheckedChanged += new System.EventHandler(this.On_cbUseDirectX_CheckedChanged);
             // 
+            // cbHideEdges
+            // 
+            this.cbHideEdges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbHideEdges.AutoSize = true;
+            this.cbHideEdges.Checked = true;
+            this.cbHideEdges.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHideEdges.Location = new System.Drawing.Point(723, 51);
+            this.cbHideEdges.Name = "cbHideEdges";
+            this.cbHideEdges.Size = new System.Drawing.Size(80, 17);
+            this.cbHideEdges.TabIndex = 2;
+            this.cbHideEdges.Text = "Hide edges";
+            this.cbHideEdges.UseVisualStyleBackColor = true;
+            this.cbHideEdges.CheckedChanged += new System.EventHandler(this.On_cbHideEdges_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(818, 540);
+            this.Controls.Add(this.cbHideEdges);
             this.Controls.Add(this.cbUseDirectX);
             this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -190,5 +206,6 @@
         private System.Windows.Forms.ToolStripMenuItem miXYintel;
         private System.Windows.Forms.ToolStripMenuItem miYZintel;
         private System.Windows.Forms.ToolStripMenuItem miXZintel;
+        private System.Windows.Forms.CheckBox cbHideEdges;
     }
 }
