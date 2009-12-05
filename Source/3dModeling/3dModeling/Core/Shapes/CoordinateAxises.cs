@@ -38,17 +38,18 @@ namespace Modeling.Core.Shapes
         /// Initializes a new instance of the <see cref="CoordinateAxises"/> class.
         /// </summary>
         /// <param name="bP">Base point to create coordinate axises.</param>
-        public CoordinateAxises(Point3D bP)
+        public CoordinateAxises(Vertex bP)
         {
             initialSides = new List<Polygon>();
             previousState = new List<Polygon>();
-            var edges = new List<Edge>
+            var verteces = new List<Vertex>
                         {
-                            new Edge(bP, new Point3D(bP.X + AXIS_LENGTH, bP.Y, bP.Z)),
-                            new Edge(bP, new Point3D(bP.X, bP.Y - AXIS_LENGTH, bP.Z)),
-                            new Edge(bP, new Point3D(bP.X, bP.Y, bP.Z + AXIS_LENGTH))
+                            bP,
+                            new Vertex(bP.X + AXIS_LENGTH, bP.Y, bP.Z),
+                            new Vertex(bP.X, bP.Y - AXIS_LENGTH, bP.Z),
+                            new Vertex(bP.X, bP.Y, bP.Z + AXIS_LENGTH)
                         };
-            sides.Add(new Polygon { Edges = edges });
+            sides.Add(new Polygon { Verteces = verteces });
         }
         #endregion
 
@@ -57,7 +58,7 @@ namespace Modeling.Core.Shapes
         /// Gets the base point of the coordinate system.
         /// </summary>
         [DataMember]
-        public Point3D BasePoint
+        public Vertex BasePoint
         {
             get
             {
@@ -71,11 +72,11 @@ namespace Modeling.Core.Shapes
         /// Overrides base method Draw to render colored axises instead sided shape.
         /// </summary>
         /// <param name="g">Graphics context from redering form.</param>
-        public override void Draw(Graphics g)
+        public override void Draw(Graphics g, Color color)
         {
-            g.DrawLine(new Pen(Color.Blue, 3F), sides[0].Edges[0].Vertex1, sides[0].Edges[0].Vertex2);
-            g.DrawLine(new Pen(Color.Red, 3F), sides[0].Edges[1].Vertex1, sides[0].Edges[1].Vertex2);
-            g.DrawLine(new Pen(Color.Green, 3F), sides[0].Edges[2].Vertex1, sides[0].Edges[2].Vertex2);
+            g.DrawLine(new Pen(Color.Blue, 3F), sides[0].Verteces[0], sides[0].Verteces[1]);
+            g.DrawLine(new Pen(Color.Red, 3F), sides[0].Verteces[0], sides[0].Verteces[2]);
+            g.DrawLine(new Pen(Color.Green, 3F), sides[0].Verteces[0], sides[0].Verteces[3]);
 
             previousState = new List<Polygon>(sides);
         }
@@ -83,15 +84,11 @@ namespace Modeling.Core.Shapes
         public override void Draw(Device device, Color color)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
-            device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(sides[0].Edges[0], Color.Blue));
-            device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(sides[0].Edges[1], Color.Red));
-            device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(sides[0].Edges[2], Color.Green));
+            device.DrawUserPrimitives(PrimitiveType.LineList, 1, GetTransformedColoredFromVerteces(sides[0].Verteces[0], sides[0].Verteces[1], Color.Blue));
+            device.DrawUserPrimitives(PrimitiveType.LineList, 1, GetTransformedColoredFromVerteces(sides[0].Verteces[0], sides[0].Verteces[2], Color.Red));
+            device.DrawUserPrimitives(PrimitiveType.LineList, 1, GetTransformedColoredFromVerteces(sides[0].Verteces[0], sides[0].Verteces[3], Color.Green));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="g"></param>
         public override void Erase(Graphics g)
         {
             if (previousState.Count == 0)
@@ -108,9 +105,28 @@ namespace Modeling.Core.Shapes
             initialSides = new List<Polygon>(sides.ToArray());
         }
 
-        public override void Scale(Point3D basePoint, float scale)
+        public override void Scale(Vertex basePoint, float scale)
         {
             base.Scale(basePoint, 1);
+        }
+        #endregion
+
+        #region Auxiliary Methods
+        private static CustomVertex.TransformedColored[] GetTransformedColoredFromVerteces(Vertex Vertex1, Vertex Vertex2, Color color)
+        {
+            var verts = new CustomVertex.TransformedColored[2];
+
+            verts[0].X = Vertex1.X;
+            verts[0].Y = Vertex1.Y;
+            verts[0].Z = Vertex1.Z;
+            verts[0].Color = color.ToArgb();
+
+            verts[1].X = Vertex2.X;
+            verts[1].Y = Vertex2.Y;
+            verts[1].Z = Vertex2.Z;
+            verts[1].Color = color.ToArgb();
+
+            return verts;
         }
         #endregion
     }

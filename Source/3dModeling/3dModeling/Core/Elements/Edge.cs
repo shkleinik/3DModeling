@@ -1,19 +1,27 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Edge.cs" company="Walash Ltd.">
+//     Copyright (c) Walash Ltd. All rights reserved.
+// </copyright>
+// <author>Pavel Shkleinik</author>
+//-----------------------------------------------------------------------
+
 
 namespace Modeling.Core.Elements
 {
+    using System;
+
     [Serializable]
     public class Edge
     {
         #region Properties
-        public Point3D Vertex1 { get; set; }
-        public Point3D Vertex2 { get; set; }
+        public Vertex Vertex1 { get; set; }
+        public Vertex Vertex2 { get; set; }
         #endregion
 
         #region Constructors
         private Edge() { }
 
-        public Edge(Point3D v1, Point3D v2)
+        public Edge(Vertex v1, Vertex v2)
         {
             Vertex1 = v1;
             Vertex2 = v2;

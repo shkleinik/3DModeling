@@ -21,7 +21,7 @@ namespace Modeling.Core.Shapes
         /// </summary>
         /// <param name="basePoint">It is bottom, left and closest pint of cube</param>
         /// <param name="edgeLength">The length of one of the edges</param>
-        public Cube(Point3D basePoint, float edgeLength)
+        public Cube(Vertex basePoint, float edgeLength)
             : base(basePoint, 4, (float)(edgeLength / Math.Sqrt(2.0F)), edgeLength)
         {
             EdgeLength = edgeLength;

@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Point3D.cs" company="Walash Ltd.">
+// <copyright file="Vertex.cs" company="Walash Ltd.">
 //     Copyright (c) Walash Ltd. All rights reserved.
 // </copyright>
 // <author>Pavel Shkleinik</author>
@@ -10,7 +10,7 @@ namespace Modeling.Core.Elements
     using System;
     using System.Drawing;
 
-    public class Point3D : IComparable
+    public class Vertex : IComparable
     {
         #region Properties
         public float X { get; set; }
@@ -19,23 +19,23 @@ namespace Modeling.Core.Elements
         #endregion
 
         #region Constructors
-        private Point3D() { }
+        private Vertex() { }
 
-        public Point3D(float x, float y)
+        public Vertex(float x, float y)
         {
             X = x;
             Y = y;
             Z = 0;
         }
 
-        public Point3D(float x, float y, float z)
+        public Vertex(float x, float y, float z)
         {
             X = x;
             Y = y;
             Z = z;
         }
 
-        public Point3D(Point p)
+        public Vertex(Point p)
         {
             X = p.X;
             Y = p.Y;
@@ -43,7 +43,7 @@ namespace Modeling.Core.Elements
         }
         #endregion
 
-        public static implicit operator PointF(Point3D point3D)
+        public static implicit operator PointF(Vertex point3D)
         {
             return new PointF(point3D.X, point3D.Y);
         }
@@ -52,11 +52,11 @@ namespace Modeling.Core.Elements
 
         public int CompareTo(object obj)
         {
-            if (!(obj is Point3D))
+            if (!(obj is Vertex))
                 throw new ArgumentException("object is not a Point3D");
 
 
-            var otherPoint = (Point3D)obj;
+            var otherPoint = (Vertex)obj;
 
             return X.CompareTo(otherPoint.X) + Y.CompareTo(otherPoint.Y) + Z.CompareTo(otherPoint.Z);
 

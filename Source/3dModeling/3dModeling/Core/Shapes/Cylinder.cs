@@ -28,7 +28,7 @@ namespace Modeling.Core.Shapes
         /// <param name="basePoint">It is bottom center point.</param>
         /// <param name="radius">The radius of bottom or top circle.</param>
         /// <param name="height">Cylinder height.</param>
-        public Cylinder(Point3D basePoint, float radius, float height)
+        public Cylinder(Vertex basePoint, float radius, float height)
             : base(basePoint, APPORXIMATION_LEVEL, radius, height)
         {
         }

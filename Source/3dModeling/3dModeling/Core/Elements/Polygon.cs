@@ -7,8 +7,8 @@
 
 namespace Modeling.Core.Elements
 {
-    using System;
     using System.Collections.Generic;
+    using L = Light;
 
     /// <summary>
     /// Reprsents a side of a shape.
@@ -21,8 +21,7 @@ namespace Modeling.Core.Elements
         /// </summary>
         public Polygon()
         {
-            Edges = new List<Edge>();
-            verteces = new List<Point3D>();
+            Verteces = new List<Vertex>();
         }
         #endregion
 
@@ -30,53 +29,25 @@ namespace Modeling.Core.Elements
         /// <summary>
         /// Gets or sets collection of edges surrounding the side.
         /// </summary>
-        public List<Edge> Edges { get; set; }
+        public List<Edge> Edges
+        {
+            get
+            {
+                var edges = new List<Edge>
+                            {
+                                new Edge(Verteces[0], Verteces[1]),
+                                new Edge(Verteces[1], Verteces[2]),
+                                new Edge(Verteces[2], Verteces[0])
+                            };
+
+                return edges;
+            }
+        }
 
         /// <summary>
         /// Gets collection of verteces of current side.
         /// </summary>
-        public List<Point3D> Verteces
-        {
-            get
-            {
-                //if (verteces.Count == 3)
-                //    return verteces;
-
-                //foreach (var edge in Edges)
-                //{
-                //    var isV1InCollection = false;
-
-                //    foreach (var vertex in verteces)
-                //    {
-                //        if (vertex.CompareTo(edge.Vertex1) != 0) continue;
-                //        isV1InCollection = true;
-                //        break;
-                //    }
-
-                //    if (!isV1InCollection)
-                //        verteces.Add(edge.Vertex1);
-
-                //    var isV2InCollection = false;
-
-                //    foreach (var vertex in verteces)
-                //    {
-                //        if (vertex.CompareTo(edge.Vertex2) != 0) continue;
-                //        isV2InCollection = true;
-                //        break;
-                //    }
-
-                //    if (!isV2InCollection)
-                //        verteces.Add(edge.Vertex2);
-                //}
-
-                return verteces;
-            }
-
-            set
-            {
-                verteces = value;
-            }
-        }
+        public List<Vertex> Verteces { get; set; }
 
         public float Depth
         {
@@ -104,7 +75,7 @@ namespace Modeling.Core.Elements
         #endregion
 
         #region Fields
-        private List<Point3D> verteces;
+
         #endregion
 
         #region Methods
@@ -113,35 +84,12 @@ namespace Modeling.Core.Elements
             if (Verteces.Count < 3)
                 return false;
 
-            var Vis = new Point3D(0, 0, 1000);
+            var pointOfView = new Vertex(0, 0, 1000);
+            var normal = L.GetNormal(this);
 
-            var normal = GetNormal();
-            var normalLength = GetNormalLength();
-            double cosAngleBetweenNormalAndVisiblePoint;
+            var cosAngleBetweenNormalAndPointOfView = L.GetAngleBetweenNormals(normal, pointOfView);
 
-            var visiblePointLength = Math.Sqrt(Math.Pow(Vis.X, 2) + Math.Pow(Vis.Y, 2) + Math.Pow(Vis.Z, 2));
-
-            if (normalLength == 0 || visiblePointLength == 0)
-                cosAngleBetweenNormalAndVisiblePoint = -1;
-            else
-            {
-                cosAngleBetweenNormalAndVisiblePoint = (normal.X * Vis.X + normal.Y * Vis.Y + normal.Z * Vis.Z) / (normalLength * visiblePointLength);
-            }
-            return (cosAngleBetweenNormalAndVisiblePoint > 0);
-        }
-
-        private double GetNormalLength()
-        {
-            var norm = GetNormal();
-
-            return Math.Sqrt(Math.Pow(norm.X, 2) + Math.Pow(norm.Y, 2) + Math.Pow(norm.Z, 2));
-        }
-
-        private Point3D GetNormal()
-        {
-            var VecA = new Point3D(Verteces[1].X - Verteces[0].X, Verteces[1].Y - Verteces[0].Y, Verteces[1].Z - Verteces[0].Z);
-            var VecB = new Point3D(Verteces[2].X - Verteces[1].X, Verteces[2].Y - Verteces[1].Y, Verteces[2].Z - Verteces[1].Z);
-            return new Point3D(VecA.Y * VecB.Z - VecA.Z * VecB.Y, VecA.X * VecB.Z - VecA.Z * VecB.X, VecA.X * VecB.Y - VecA.Y * VecB.X);
+            return (cosAngleBetweenNormalAndPointOfView > 0);
         }
         #endregion
     }

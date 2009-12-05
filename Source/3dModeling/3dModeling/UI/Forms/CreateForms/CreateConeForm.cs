@@ -31,7 +31,7 @@ namespace Modeling.UI.Forms.CreateForms
                 var yDisplacement = Convert.ToSingle((string) tbY.Text);
                 var zDisplacement = Convert.ToSingle((string) tbZ.Text);
 
-                var newBasePoint = new Point3D(bP.X + xDisplacement, bP.Y + yDisplacement, bP.Z + zDisplacement);
+                var newBasePoint = new Vertex(bP.X + xDisplacement, bP.Y + yDisplacement, bP.Z + zDisplacement);
 
                 
                 var radius = Convert.ToUInt32((string) tbRadius.Text);
@@ -47,7 +47,7 @@ namespace Modeling.UI.Forms.CreateForms
             Close();
         }
 
-        public Point3D GetBasePoint()
+        public Vertex GetBasePoint()
         {
             return ((CoordinateAxises)objects3D[0]).BasePoint;
         }
