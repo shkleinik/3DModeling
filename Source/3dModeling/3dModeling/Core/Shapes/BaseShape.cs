@@ -26,20 +26,20 @@ namespace Modeling.Core.Shapes
         /// state. Also we use it to erase previous state.
         /// </summary>
         [DataMember]
-        protected List<Side> previousState;
+        protected List<Polygon> previousState;
 
         /// <summary>
         /// Collection of sides for current shape.
         /// </summary>
         [DataMember]
-        public List<Side> sides;
+        public List<Polygon> sides;
         /// <summary>
         /// State of the shape before transformation. Is used to visualize continious transformation.
         /// Here we save our state after mouse down and store it until mouse up. All dynamic transformations 
         /// are doing relatively this state.
         /// </summary>
         [DataMember]
-        protected List<Side> initialSides;
+        protected List<Polygon> initialSides;
         #endregion
 
         #region Constructors
@@ -49,10 +49,10 @@ namespace Modeling.Core.Shapes
         public BaseShape()
         {
             //edges = new List<Edge>();
-            sides = new List<Side>();
+            sides = new List<Polygon>();
             //initialEdges = new List<Edge>();
-            initialSides = new List<Side>();
-            previousState = new List<Side>();
+            initialSides = new List<Polygon>();
+            previousState = new List<Polygon>();
         }
         #endregion
 
@@ -65,7 +65,7 @@ namespace Modeling.Core.Shapes
         /// <param name="scale">This value is used to increase(decrease) shape size in all directions.</param>
         public virtual void Scale(Point3D basePoint, float scale)
         {
-            var tmpSides = new List<Side>();
+            var tmpSides = new List<Polygon>();
             foreach (var side in sides)
             {
                 tmpSides.Add(Transformations.ScaleSide(basePoint, side, scale, scale, scale));
@@ -83,7 +83,7 @@ namespace Modeling.Core.Shapes
         /// <param name="scaleZ">Scale for Z axis.</param>
         public virtual void Scale(Point3D basePoint, float scaleX, float scaleY, float scaleZ)
         {
-            var tmpSides = new List<Side>();
+            var tmpSides = new List<Polygon>();
             foreach (var side in sides)
             {
                 tmpSides.Add(Transformations.ScaleSide(basePoint, side, scaleX, scaleY, scaleZ));
@@ -162,6 +162,33 @@ namespace Modeling.Core.Shapes
                 sides.Add(Transformations.XZProjection(side));
             }
         }
+
+        public void AksonometricProjection(double psi, double phi)
+        {
+            sides.Clear();
+            foreach (var side in initialSides)
+            {
+                sides.Add(Transformations.AksonometricProjection(side, psi, phi));
+            }
+        }
+
+        public void BevelProjection(double L, double alpha)
+        {
+            sides.Clear();
+            foreach (var side in initialSides)
+            {
+                sides.Add(Transformations.BevelProjection(side, L, alpha));
+            }
+        }
+
+        public void PerspectiveProjection(float d)
+        {
+            sides.Clear();
+            foreach (var side in initialSides)
+            {
+                sides.Add(Transformations.PerspectiveProjection(side, d));
+            }
+        }
         #endregion
 
         #endregion
@@ -173,7 +200,7 @@ namespace Modeling.Core.Shapes
         /// </summary>
         public virtual void SaveState()
         {
-            initialSides = new List<Side>(sides.ToArray());
+            initialSides = new List<Polygon>(sides.ToArray());
         }
 
         /// <summary>
@@ -185,32 +212,40 @@ namespace Modeling.Core.Shapes
         {
             foreach (var side in sides)
             {
-                if (side.Vertexes.Count < 2)
+                if (side.Verteces.Count < 2)
                     continue;
-                g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
 
-                g.FillPolygon(Brushes.BlueViolet, ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
+                if (!side.IsVisible)
+                    continue;
+
+                g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
+
+                g.FillPolygon(Brushes.BlueViolet, ConvertPoints3DToPontsF(side.Verteces.ToArray()));
             }
 
-            previousState = new List<Side>(sides);
+            previousState = new List<Polygon>(sides);
         }
 
         /// <summary>
         /// Overload for DirectX.
         /// </summary>
         /// <param name="device">Draw device(aka your videocard).</param>
-        public virtual void Draw(Device device)
+        /// <param name="color">Specifies the color for the figure.</param>
+        public virtual void Draw(Device device, Color color)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
-            device.SetRenderState(RenderStates.ZEnable, false);
+            // device.SetRenderState(RenderStates.CullMode, true);
 
             foreach (var side in sides)
             {
+                //if (!side.IsVisible)
+                //    continue;
+
                 foreach (var edge in side.Edges)
                 {
                     device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(edge, Color.Black));
                 }
-                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side));
+                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side, color));
             }
         }
 
@@ -222,10 +257,10 @@ namespace Modeling.Core.Shapes
         {
             foreach (var side in previousState)
             {
-                g.FillPolygon(Brushes.White, ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
-                if (side.Vertexes.Count < 2)
+                g.FillPolygon(Brushes.White, ConvertPoints3DToPontsF(side.Verteces.ToArray()));
+                if (side.Verteces.Count < 2)
                     continue;
-                g.DrawPolygon(new Pen(Brushes.White, 2F), ConvertPoints3DToPontsF(side.Vertexes.ToArray()));
+                g.DrawPolygon(new Pen(Brushes.White, 2F), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
             }
         }
         #endregion
@@ -260,26 +295,26 @@ namespace Modeling.Core.Shapes
             return verts;
         }
 
-        protected static CustomVertex.TransformedColored[] ConvertSideToTransformedColored(Side side)
+        protected static CustomVertex.TransformedColored[] ConvertSideToTransformedColored(Polygon polygon, Color color)
         {
             var verts = new CustomVertex.TransformedColored[3];
-            if (side.Vertexes.Count < 3)
+            if (polygon.Verteces.Count < 3)
                 return verts;
 
-            verts[0].X = side.Vertexes[0].X;
-            verts[0].Y = side.Vertexes[0].Y;
-            verts[0].Z = side.Vertexes[0].Z;
-            verts[0].Color = Color.BlueViolet.ToArgb();
+            verts[0].X = polygon.Verteces[0].X;
+            verts[0].Y = polygon.Verteces[0].Y;
+            verts[0].Z = polygon.Verteces[0].Z;
+            verts[0].Color = color.ToArgb();
 
-            verts[1].X = side.Vertexes[1].X;
-            verts[1].Y = side.Vertexes[1].Y;
-            verts[1].Z = side.Vertexes[1].Z;
-            verts[1].Color = Color.BlueViolet.ToArgb();
+            verts[1].X = polygon.Verteces[1].X;
+            verts[1].Y = polygon.Verteces[1].Y;
+            verts[1].Z = polygon.Verteces[1].Z;
+            verts[1].Color = color.ToArgb();
 
-            verts[2].X = side.Vertexes[2].X;
-            verts[2].Y = side.Vertexes[2].Y;
-            verts[2].Z = side.Vertexes[2].Z;
-            verts[2].Color = Color.BlueViolet.ToArgb();
+            verts[2].X = polygon.Verteces[2].X;
+            verts[2].Y = polygon.Verteces[2].Y;
+            verts[2].Z = polygon.Verteces[2].Z;
+            verts[2].Color = color.ToArgb();
 
             return verts;
         }

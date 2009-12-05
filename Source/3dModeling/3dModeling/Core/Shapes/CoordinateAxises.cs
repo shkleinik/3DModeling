@@ -40,24 +40,16 @@ namespace Modeling.Core.Shapes
         /// <param name="bP">Base point to create coordinate axises.</param>
         public CoordinateAxises(Point3D bP)
         {
-            initialSides = new List<Side>();
-            previousState = new List<Side>();
+            initialSides = new List<Polygon>();
+            previousState = new List<Polygon>();
             var edges = new List<Edge>
                         {
                             new Edge(bP, new Point3D(bP.X + AXIS_LENGTH, bP.Y, bP.Z)),
                             new Edge(bP, new Point3D(bP.X, bP.Y - AXIS_LENGTH, bP.Z)),
                             new Edge(bP, new Point3D(bP.X, bP.Y, bP.Z + AXIS_LENGTH))
                         };
-            sides.Add(new Side { Edges = edges });
+            sides.Add(new Polygon { Edges = edges });
         }
-        #endregion
-
-        #region Fields
-
-        private double alpha;
-        private double beta;
-        private double gamma;
-
         #endregion
 
         #region Properties
@@ -72,54 +64,6 @@ namespace Modeling.Core.Shapes
                 return sides[0].Edges[0].Vertex1;
             }
         }
-
-        [DataMember]
-        public double Alpha
-        { get; set; }
-        //    get
-        //    {
-        //        return alpha;
-        //    }
-        //    set
-        //    {
-        //        if (value > 2 * Math.PI)
-        //        {
-        //            alpha = value - 2 * Math.PI;
-        //            return;
-        //        }
-        //        if (value < -2 * Math.PI)
-        //        {
-        //            alpha = value + 2 * Math.PI;
-        //            return;
-        //        }
-        //        alpha = value;
-        //    }
-        //}
-
-        [DataMember]
-        public double Beta { get; set; }
-        //    get
-        //    {
-        //        return beta;
-        //    }
-        //    set
-        //    {
-        //        if (value > 2 * Math.PI)
-        //        {
-        //            beta = value - 2 * Math.PI;
-        //            return;
-        //        }
-        //        if (value < -2 * Math.PI)
-        //        {
-        //            beta = value + 2 * Math.PI;
-        //            return;
-        //        }
-        //        beta = value;
-        //    }
-        //}
-
-        [DataMember]
-        public float Gamma { get; set; }
         #endregion
 
         #region Base methods overrides
@@ -133,10 +77,10 @@ namespace Modeling.Core.Shapes
             g.DrawLine(new Pen(Color.Red, 3F), sides[0].Edges[1].Vertex1, sides[0].Edges[1].Vertex2);
             g.DrawLine(new Pen(Color.Green, 3F), sides[0].Edges[2].Vertex1, sides[0].Edges[2].Vertex2);
 
-            previousState = new List<Side>(sides);
+            previousState = new List<Polygon>(sides);
         }
 
-        public override void Draw(Device device)
+        public override void Draw(Device device, Color color)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
             device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(sides[0].Edges[0], Color.Blue));
@@ -161,7 +105,7 @@ namespace Modeling.Core.Shapes
 
         public override void SaveState()
         {
-            initialSides = new List<Side>(sides.ToArray());
+            initialSides = new List<Polygon>(sides.ToArray());
         }
 
         public override void Scale(Point3D basePoint, float scale)
