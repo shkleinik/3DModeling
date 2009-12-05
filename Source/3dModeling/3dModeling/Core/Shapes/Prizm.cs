@@ -1,4 +1,4 @@
-/*//-----------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // <copyright file="Prizm.cs" company="Walash Ltd.">
 //     Copyright (c) Walash Ltd. All rights reserved.
 // </copyright>
@@ -44,7 +44,7 @@ namespace Modeling.Core.Shapes
         /// <param name="sidesNumber">Number of prizm sides.</param>
         /// <param name="radius">The radius of bottom or top circumscribing circle.</param>
         /// <param name="height">Prizm height.</param>
-        public Prizm(Point3D basePoint, int sidesNumber, float radius, float height)
+        public Prizm(Vertex basePoint, int sidesNumber, float radius, float height)
         {
             if (sidesNumber < 3)
             {
@@ -77,43 +77,62 @@ namespace Modeling.Core.Shapes
                 var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
 
                 // Verteces
-                var bottomVertex = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
-                var nextBottomVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+                var bottomVertex = new Vertex(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
+                var nextBottomVertex = new Vertex(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
 
-                var topVertex = new Point3D(bottomVertex.X, bottomVertex.Y + Height, bottomVertex.Z);
-                var nextTopVertex = new Point3D(nextBottomVertex.X, nextBottomVertex.Y + Height, nextBottomVertex.Z);
-                var topBasePoint = new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z);
-                // Edges
-                //var edgeBottom = new Edge(bottomVertex, nextBottomVertex);
-                //var edgeTop = new Edge(topVertex, nextTopVertex);
-                //var edgeVertical = new Edge(bottomVertex, topVertex);
-                //var edgeNextVertical = new Edge(nextBottomVertex, nextTopVertex);
-                //var edgeInclinated = new Edge(bottomVertex, nextTopVertex);
+                var topVertex = new Vertex(bottomVertex.X, bottomVertex.Y + Height, bottomVertex.Z);
+                var nextTopVertex = new Vertex(nextBottomVertex.X, nextBottomVertex.Y + Height, nextBottomVertex.Z);
+                var topBasePoint = new Vertex(basePoint.X, basePoint.Y + Height, basePoint.Z);
 
-                // Bottom sides
-                bottomSide.Verteces.Add(basePoint);
-                bottomSide.Verteces.Add(bottomVertex);
-                bottomSide.Verteces.Add(nextBottomVertex);
+                if (Height > 0)
+                {
+                    // Bottom sides
+                    bottomSide.Verteces.Add(basePoint);
+                    bottomSide.Verteces.Add(bottomVertex);
+                    bottomSide.Verteces.Add(nextBottomVertex);
 
-                // Top sides
-                topSide.Verteces.Add(topBasePoint);
-                topSide.Verteces.Add(topVertex);
-                topSide.Verteces.Add(nextTopVertex);
+                    // Top sides
+                    topSide.Verteces.Add(nextTopVertex);
+                    topSide.Verteces.Add(topVertex);
+                    topSide.Verteces.Add(topBasePoint);
 
-                // Vertical sides
-                // One
-                sideVerticalOne.Verteces.Add(bottomVertex);
-                sideVerticalOne.Verteces.Add(nextBottomVertex);
-                sideVerticalOne.Verteces.Add(topVertex);
+                    // Vertical sides
+                    // One
+                    sideVerticalOne.Verteces.Add(topVertex);
+                    sideVerticalOne.Verteces.Add(nextBottomVertex);
+                    sideVerticalOne.Verteces.Add(bottomVertex);
 
-                // Two
-                sideVerticalTwo.Verteces.Add(topVertex);
-                sideVerticalTwo.Verteces.Add(nextTopVertex);
-                sideVerticalTwo.Verteces.Add(nextBottomVertex);
+                    // Two
+                    sideVerticalTwo.Verteces.Add(nextTopVertex);
+                    sideVerticalTwo.Verteces.Add(nextBottomVertex);
+                    sideVerticalTwo.Verteces.Add(topVertex);
+                }
+                else
+                {
+                    // Bottom sides
+                    bottomSide.Verteces.Add(nextBottomVertex);
+                    bottomSide.Verteces.Add(bottomVertex);
+                    bottomSide.Verteces.Add(basePoint);
 
+                    // Top sides
+                    topSide.Verteces.Add(topBasePoint);
+                    topSide.Verteces.Add(topVertex);
+                    topSide.Verteces.Add(nextTopVertex);
+
+                    // Vertical sides
+                    // One
+                    sideVerticalOne.Verteces.Add(bottomVertex);
+                    sideVerticalOne.Verteces.Add(nextBottomVertex);
+                    sideVerticalOne.Verteces.Add(topVertex);
+
+                    // Two
+                    sideVerticalTwo.Verteces.Add(topVertex);
+                    sideVerticalTwo.Verteces.Add(nextBottomVertex);
+                    sideVerticalTwo.Verteces.Add(nextTopVertex);
+                }
                 // Add "piece" of the prizm.
-                sides.Add(bottomSide);
                 sides.Add(topSide);
+                sides.Add(bottomSide);
                 sides.Add(sideVerticalOne);
                 sides.Add(sideVerticalTwo);
             }
@@ -145,7 +164,7 @@ namespace Modeling.Core.Shapes
         #endregion
     }
 }
-*/
+/*
 
 //-----------------------------------------------------------------------
 // <copyright file="Prizm.cs" company="Walash Ltd.">
@@ -193,7 +212,7 @@ namespace Modeling.Core.Shapes
         /// <param name="sidesNumber">Number of prizm sides.</param>
         /// <param name="radius">The radius of bottom or top circumscribing circle.</param>
         /// <param name="height">Prizm height.</param>
-        public Prizm(Point3D basePoint, int sidesNumber, float radius, float height)
+        public Prizm(Vertex basePoint, int sidesNumber, float radius, float height)
         {
             if (sidesNumber < 3)
             {
@@ -226,11 +245,11 @@ namespace Modeling.Core.Shapes
                 var nextDZ = Radius * (float)Math.Sin(angle + angleStep);
 
                 // Verteces
-                var bottomVertex = new Point3D(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
-                var nextBottomVertex = new Point3D(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
+                var bottomVertex = new Vertex(basePoint.X + dx, basePoint.Y, basePoint.Z + dz);
+                var nextBottomVertex = new Vertex(basePoint.X + nextDX, basePoint.Y, basePoint.Z + nextDZ);
 
-                var topVertex = new Point3D(bottomVertex.X, bottomVertex.Y + Height, bottomVertex.Z);
-                var nextTopVertex = new Point3D(nextBottomVertex.X, nextBottomVertex.Y + Height, nextBottomVertex.Z);
+                var topVertex = new Vertex(bottomVertex.X, bottomVertex.Y + Height, bottomVertex.Z);
+                var nextTopVertex = new Vertex(nextBottomVertex.X, nextBottomVertex.Y + Height, nextBottomVertex.Z);
 
                 // Edges
                 var edgeBottom = new Edge(bottomVertex, nextBottomVertex);
@@ -246,8 +265,8 @@ namespace Modeling.Core.Shapes
 
                 // Top sides
                 topSide.Edges.Add(new Edge(topVertex, nextTopVertex));
-                topSide.Edges.Add(new Edge(topVertex, new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z)));
-                topSide.Edges.Add(new Edge(nextTopVertex, new Point3D(basePoint.X, basePoint.Y + Height, basePoint.Z)));
+                topSide.Edges.Add(new Edge(topVertex, new Vertex(basePoint.X, basePoint.Y + Height, basePoint.Z)));
+                topSide.Edges.Add(new Edge(nextTopVertex, new Vertex(basePoint.X, basePoint.Y + Height, basePoint.Z)));
 
                 // Vertical sides
                 // One
@@ -295,3 +314,4 @@ namespace Modeling.Core.Shapes
     }
 }
 
+*/

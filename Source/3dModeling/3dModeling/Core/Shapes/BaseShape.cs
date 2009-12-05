@@ -11,6 +11,7 @@ namespace Modeling.Core.Shapes
     using System.Collections.Generic;
     using System.Drawing;
     using Elements;
+    using L = Light;
     using System.Runtime.Serialization;
     using Microsoft.DirectX.Direct3D;
 
@@ -42,6 +43,22 @@ namespace Modeling.Core.Shapes
         protected List<Polygon> initialSides;
         #endregion
 
+        #region Properties
+        public float Depth
+        {
+            get
+            {
+                float cumulativeDepth = 0;
+                foreach (var side in sides)
+                {
+                    cumulativeDepth += side.Depth;
+                }
+
+                return cumulativeDepth / sides.Count;
+            }
+        }
+        #endregion
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseShape"></see> class. Not used directly only from derived classes.
@@ -63,12 +80,12 @@ namespace Modeling.Core.Shapes
         /// </summary>
         /// <param name="basePoint">The point in the space relatively of wich the shape would be scaled.</param>
         /// <param name="scale">This value is used to increase(decrease) shape size in all directions.</param>
-        public virtual void Scale(Point3D basePoint, float scale)
+        public virtual void Scale(Vertex basePoint, float scale)
         {
             var tmpSides = new List<Polygon>();
             foreach (var side in sides)
             {
-                tmpSides.Add(Transformations.ScaleSide(basePoint, side, scale, scale, scale));
+                tmpSides.Add(Transformations.ScalePolygon(basePoint, side, scale, scale, scale));
             }
 
             sides = tmpSides;
@@ -81,12 +98,12 @@ namespace Modeling.Core.Shapes
         /// <param name="scaleX">Scale for X axis.</param>
         /// <param name="scaleY">Scale for Y axis.</param>
         /// <param name="scaleZ">Scale for Z axis.</param>
-        public virtual void Scale(Point3D basePoint, float scaleX, float scaleY, float scaleZ)
+        public virtual void Scale(Vertex basePoint, float scaleX, float scaleY, float scaleZ)
         {
             var tmpSides = new List<Polygon>();
             foreach (var side in sides)
             {
-                tmpSides.Add(Transformations.ScaleSide(basePoint, side, scaleX, scaleY, scaleZ));
+                tmpSides.Add(Transformations.ScalePolygon(basePoint, side, scaleX, scaleY, scaleZ));
             }
 
             sides = tmpSides;
@@ -99,7 +116,7 @@ namespace Modeling.Core.Shapes
         /// <param name="rotAngleX">The angle to rotate around X axis.</param>
         /// <param name="rotAngleY">The angle to rotate around Y axis.</param>
         /// <param name="rotAngleZ">The angle to rotate around Z axis.</param>
-        public virtual void Rotate(Point3D basePoint, double rotAngleX, double rotAngleY, double rotAngleZ)
+        public virtual void Rotate(Vertex basePoint, double rotAngleX, double rotAngleY, double rotAngleZ)
         {
             sides.Clear();
 
@@ -107,7 +124,7 @@ namespace Modeling.Core.Shapes
 
             foreach (var side in initialSides)
             {
-                sides.Add(t.RotateSide(basePoint, side, rotAngleX, rotAngleY, rotAngleZ));
+                sides.Add(t.RotatePolygon(basePoint, side, rotAngleX, rotAngleY, rotAngleZ));
             }
         }
 
@@ -122,7 +139,7 @@ namespace Modeling.Core.Shapes
             sides.Clear();
             foreach (var side in initialSides)
             {
-                sides.Add(Transformations.MoveSide(side, dX, dY, dZ));
+                sides.Add(Transformations.MovePolygon(side, dX, dY, dZ));
             }
         }
 
@@ -208,7 +225,7 @@ namespace Modeling.Core.Shapes
         /// state as previous to erase itself later.
         /// </summary>
         /// <param name="g">Graphics of form where the shape should be rendered.</param>
-        public virtual void Draw(Graphics g)
+        public virtual void Draw(Graphics g, Color color)
         {
             foreach (var side in sides)
             {
@@ -220,7 +237,7 @@ namespace Modeling.Core.Shapes
 
                 g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
 
-                g.FillPolygon(Brushes.BlueViolet, ConvertPoints3DToPontsF(side.Verteces.ToArray()));
+                g.FillPolygon(new SolidBrush(L.GetHalfToneColorForPolygon(side, color)), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
             }
 
             previousState = new List<Polygon>(sides);
@@ -234,18 +251,17 @@ namespace Modeling.Core.Shapes
         public virtual void Draw(Device device, Color color)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
-            // device.SetRenderState(RenderStates.CullMode, true);
 
             foreach (var side in sides)
             {
-                //if (!side.IsVisible)
-                //    continue;
+                if (!side.IsVisible)
+                    continue;
 
                 foreach (var edge in side.Edges)
                 {
                     device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(edge, Color.Black));
                 }
-                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side, color));
+                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side, L.GetHalfToneColorForPolygon(side, color)));
             }
         }
 
@@ -266,7 +282,7 @@ namespace Modeling.Core.Shapes
         #endregion
 
         #region Auxiliary Methods
-        private static PointF[] ConvertPoints3DToPontsF(Point3D[] points3D)
+        private static PointF[] ConvertPoints3DToPontsF(Vertex[] points3D)
         {
             var pointsF = new PointF[points3D.Length];
 

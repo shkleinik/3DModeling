@@ -26,6 +26,7 @@ namespace Modeling.UI.Forms
         private const int MAX_GRID_STEP = 500;
         private const int SCALE_STEP = 2;
         private const string PATHTO_SERIALIZED_STATE = "Walash.3Dscene";
+        private static readonly Color COLOR_TO_DRAW = Color.Red;
         #endregion
 
         #region Fields
@@ -34,7 +35,7 @@ namespace Modeling.UI.Forms
 
         private List<BaseShape> objectsToDraw;
         private BaseShape polyShape;
-        private Point3D basePoint;
+        private Vertex basePoint;
         private PointF moveStartPoint;
         private double rotateStartAngle;
 
@@ -97,22 +98,26 @@ namespace Modeling.UI.Forms
         {
             InitializeDirectX();
 
-            basePoint = new Point3D((float)Width / 2, (float)Height / 2);
+            basePoint = new Vertex((float)Width / 2, (float)Height / 2);
             polyShape = new BaseShape();
             moveStartPoint = basePoint;
 
-            var cube = new Cube(new Point3D(basePoint.X, basePoint.Y, basePoint.Z), 200);
+            var cube = new Cube(new Vertex(basePoint.X - 300, basePoint.Y + 100, basePoint.Z), 200);
             var pyramid = new Pyramid(basePoint, 3, 50, 100);
-            var cone = new Cone(basePoint, 25, -50);
+            var pyramidReverse = new Pyramid(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z + 300), 9, 50, -100);
+            var cone = new Cone(basePoint, 25, 50);
             //var axises = new CoordinateAxises(basePoint);
             var cylinder = new Cylinder(basePoint, 100, 200);
+            var cylinderReverse = new Cylinder(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z), 100, -200);
             //var prizm = new Prizm(basePoint, 4, (float)(200 / Math.Sqrt(2.0F)), -200);
 
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
             objectsToDraw.Add(pyramid);
-            //objectsToDraw.Add(cone);
-            //objectsToDraw.Add(cylinder);
-            //objectsToDraw.Add(cube);
+            objectsToDraw.Add(pyramidReverse);
+            objectsToDraw.Add(cone);
+            objectsToDraw.Add(cylinder);
+            objectsToDraw.Add(cylinderReverse);
+            objectsToDraw.Add(cube);
 
             SaveObjectsState(objectsToDraw);
             On_MainForm_Paint(null, null);
@@ -391,35 +396,19 @@ namespace Modeling.UI.Forms
         #endregion
 
         #region Actions with objects
-        private static double GetZRotateAngle(PointF basePoint, PointF aimPoint)
-        {
-            var dX = aimPoint.X - basePoint.X;
-            var dY = basePoint.Y - aimPoint.Y;
-            if (dY == 0 && dX > 0)
-                return 0;
-            if (dY == 0 && dX < 0)
-                return Math.PI;
-
-            var dySign = dY / Math.Abs(dY);
-
-            if (dySign < 0)
-                return Math.PI + Math.Acos(dX * dySign / Math.Sqrt(dY * dY + dX * dX));
-
-            return Math.Acos(dX * dySign / Math.Sqrt(dY * dY + dX * dX));
-        }
-
+        
         private void DrawObjects(IEnumerable<BaseShape> objsToDraw)
         {
             foreach (var obj in objsToDraw)
             {
-                obj.Draw(CreateGraphics());
+                obj.Draw(CreateGraphics(), COLOR_TO_DRAW);
             }
         }
 
         private void DrawObjectsWithoutHiddenEdges()
         {
             ReInitPolyShape();
-            polyShape.Draw(CreateGraphics());
+            polyShape.Draw(CreateGraphics(), COLOR_TO_DRAW);
         }
 
         public void DrawObjectsWithDX(IEnumerable<BaseShape> objsToDraw)
@@ -429,7 +418,7 @@ namespace Modeling.UI.Forms
 
             foreach (var obj in objsToDraw)
             {
-                obj.Draw(device, Color.GreenYellow);
+                obj.Draw(device, COLOR_TO_DRAW);
             }
             device.EndScene();
             device.Present();
@@ -448,10 +437,18 @@ namespace Modeling.UI.Forms
                 polyShape.PerspectiveProjection(d);
             }
             polyShape.SaveState();
-            polyShape.Draw(device, Color.GreenYellow);
+            polyShape.Draw(device, COLOR_TO_DRAW);
+            objsToDraw[0].Draw(device, COLOR_TO_DRAW);
 
             device.EndScene();
             device.Present();
+
+            // do not work for projections
+            //var coordinateAxes = objsToDraw[0];
+            //objsToDraw.Sort(CompareShapesByDepth);
+            //objsToDraw.Remove(coordinateAxes);
+            //objsToDraw.Insert(0, coordinateAxes);
+            //DrawObjectsWithDX(objsToDraw);
         }
 
         private void EraseObjects(IEnumerable<BaseShape> objsToDraw)
@@ -507,26 +504,75 @@ namespace Modeling.UI.Forms
         }
         #endregion
 
-        private void ReInitPolyShape()
+        private static double GetZRotateAngle(PointF basePoint, PointF aimPoint)
         {
-            // var coordinateAxises = (CoordinateAxises) objectsToDraw[0];
-            var allSides = new List<Polygon>();
+            var dX = aimPoint.X - basePoint.X;
+            var dY = basePoint.Y - aimPoint.Y;
+            if (dY == 0 && dX > 0)
+                return 0;
+            if (dY == 0 && dX < 0)
+                return Math.PI;
 
-            foreach (var obj in objectsToDraw)
-            {
-                allSides.AddRange(obj.sides);
-            }
+            var dySign = dY / Math.Abs(dY);
 
-            allSides.Sort(CompareSidesByDepth);
+            if (dySign < 0)
+                return Math.PI + Math.Acos(dX * dySign / Math.Sqrt(dY * dY + dX * dX));
 
-            polyShape = new BaseShape { sides = allSides };
-
-            //objectsToDraw.Clear();
-            //objectsToDraw.Add(coordinateAxises);
-            //objectsToDraw.Add(polyShape);
+            return Math.Acos(dX * dySign / Math.Sqrt(dY * dY + dX * dX));
         }
 
-        private static int CompareSidesByDepth(Polygon one, Polygon two)
+        private void ReInitPolyShape()
+        {
+
+            var allSides = new List<Polygon>();
+
+            for (var i = 1; i < objectsToDraw.Count; i++)
+            {
+                allSides.AddRange(objectsToDraw[i].sides);
+            }
+
+            allSides.Sort(ComparePolygonsByDepth);
+
+            polyShape = new BaseShape { sides = allSides };
+        }
+
+        private static int ComparePolygonsByDepth(Polygon one, Polygon two)
+        {
+            if (one == null)
+            {
+                if (two == null)
+                {
+                    // If one is null and two is null, they're
+                    // equal. 
+                    return 0;
+                }
+                else
+                {
+                    // If one is null and two is not null, two
+                    // is greater. 
+                    return -1;
+                }
+            }
+            else
+            {
+                // If one is not null...
+                //
+                if (two == null)
+                // ...and two is null, one is greater.
+                {
+                    return 1;
+                }
+                else
+                {
+                    // ...and two is not null, compare the 
+                    // lengths of the two strings.
+                    //
+                    return one.Depth.CompareTo(two.Depth);
+                }
+            }
+        }
+
+        private static int CompareShapesByDepth(BaseShape one, BaseShape two)
         {
             if (one == null)
             {

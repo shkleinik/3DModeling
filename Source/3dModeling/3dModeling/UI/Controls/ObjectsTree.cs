@@ -64,7 +64,7 @@
             PopulateTree();
         }
 
-        public void RotateSelectedObject(Point3D bp, float angleX, float angleY, float angleZ)
+        public void RotateSelectedObject(Vertex bp, float angleX, float angleY, float angleZ)
         {
             if (IsCoordinateAxesSelected())
                 return;
@@ -73,7 +73,7 @@
 
         }
 
-        public void ScaleSelectedObject(Point3D bp, float scaleX, float scaleY, float scaleZ)
+        public void ScaleSelectedObject(Vertex bp, float scaleX, float scaleY, float scaleZ)
         {
             if (IsCoordinateAxesSelected())
                 return;

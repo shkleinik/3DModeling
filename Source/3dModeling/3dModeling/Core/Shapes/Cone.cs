@@ -28,7 +28,7 @@ namespace Modeling.Core.Shapes
         /// <param name="basePoint">Specifies the basepoint from what the pyramid will be built.</param>
         /// <param name="radius">Specifies radius of cone bottom circle.</param>
         /// <param name="height">Specifies pyramids height.</param>
-        public Cone(Point3D basePoint, float radius, float height)
+        public Cone(Vertex basePoint, float radius, float height)
             : base(basePoint, APPORXIMATION_LEVEL, radius, height)
         {
         }

@@ -78,12 +78,13 @@
   <ItemGroup>
     <Compile Include="Core\Elements\Polygon.cs" />
     <Compile Include="Core\Helpers\Serializator.cs" />
+    <Compile Include="Core\Light.cs" />
     <Compile Include="Core\Shapes\Cone.cs" />
     <Compile Include="Core\Shapes\CoordinateAxises.cs" />
     <Compile Include="Core\Shapes\Cube.cs" />
     <Compile Include="Core\Elements\Edge.cs" />
     <Compile Include="Core\Shapes\BaseShape.cs" />
-    <Compile Include="Core\Elements\Point3D.cs" />
+    <Compile Include="Core\Elements\Vertex.cs" />
     <Compile Include="Core\Shapes\Cylinder.cs" />
     <Compile Include="Core\Shapes\Prizm.cs" />
     <Compile Include="Core\Shapes\Pyramid.cs" />
