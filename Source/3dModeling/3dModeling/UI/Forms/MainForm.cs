@@ -11,13 +11,12 @@ namespace Modeling.UI.Forms
     using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
-    using Controls;
     using Core.Elements;
     using Core.Shapes;
     using Microsoft.DirectX.Direct3D;
     using S = Core.Helpers.Serializator;
     using T = Core.Transformations;
-    using Microsoft.DirectX.PrivateImplementationDetails;
+    using ProjectionsForms;
 
     public partial class MainForm : Form
     {
@@ -42,8 +41,7 @@ namespace Modeling.UI.Forms
         private int gridStep = DEFAULT_GRID_STEP;
         private bool allowScale = true;
         private bool isControlPressed;
-        private AnglesTracker at;
-
+        private float d;
         #endregion
 
         #region Properties
@@ -104,26 +102,21 @@ namespace Modeling.UI.Forms
             moveStartPoint = basePoint;
 
             var cube = new Cube(new Point3D(basePoint.X, basePoint.Y, basePoint.Z), 200);
-            // var pyramid = new Pyramid(basePoint, 3, 50, 100);
-            // var cone = new Cone(basePoint, 25, -50);
-            // var axises = new CoordinateAxises(basePoint);
-            var cylinder = new Cylinder(basePoint, 100, -200);
-            //var prizm = new Prizm(basePoint, 4, (float) (200 / Math.Sqrt(2.0F)), -200);
+            var pyramid = new Pyramid(basePoint, 3, 50, 100);
+            var cone = new Cone(basePoint, 25, -50);
+            //var axises = new CoordinateAxises(basePoint);
+            var cylinder = new Cylinder(basePoint, 100, 200);
+            //var prizm = new Prizm(basePoint, 4, (float)(200 / Math.Sqrt(2.0F)), -200);
 
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
-            // objectsToDraw.Add(pyramid);
-            // objectsToDraw.Add(cone);
-            objectsToDraw.Add(cylinder);
-            objectsToDraw.Add(cube);
+            objectsToDraw.Add(pyramid);
+            //objectsToDraw.Add(cone);
+            //objectsToDraw.Add(cylinder);
+            //objectsToDraw.Add(cube);
 
             SaveObjectsState(objectsToDraw);
+            On_MainForm_Paint(null, null);
 
-            at = new AnglesTracker
-                     {
-                         Anchor = (AnchorStyles.Bottom | AnchorStyles.Left)
-                     };
-            at.Location = new Point(0, Height - at.Height - 30);
-            Controls.Add(at);
         }
 
         private void On_MainForm_Closing(object sender, FormClosingEventArgs e)
@@ -217,6 +210,27 @@ namespace Modeling.UI.Forms
 
         }
 
+        private void On_MainForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            Select();
+            SaveObjectsState(objectsToDraw);
+            moveStartPoint.X = e.X;
+            moveStartPoint.Y = e.Y;
+            basePoint = ((CoordinateAxises)objectsToDraw[0]).BasePoint;
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    rotateStartAngle = GetZRotateAngle(basePoint, e.Location);
+                    Cursor = new Cursor(GetType(), "RotateCursor.cur");
+                    break;
+                case MouseButtons.Right:
+                    Cursor = Cursors.SizeAll;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void On_MainForm_MouseMove(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -241,29 +255,9 @@ namespace Modeling.UI.Forms
             }
         }
 
-        private void On_MainForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            Select();
-            SaveObjectsState(objectsToDraw);
-            moveStartPoint.X = e.X;
-            moveStartPoint.Y = e.Y;
-            basePoint = ((CoordinateAxises)objectsToDraw[0]).BasePoint;
-            switch (e.Button)
-            {
-                case MouseButtons.Left:
-                    rotateStartAngle = GetZRotateAngle(basePoint, e.Location);
-                    Cursor = new Cursor(GetType(), "RotateCursor.cur");
-                    break;
-                case MouseButtons.Right:
-                    Cursor = Cursors.SizeAll;
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void On_MainForm_MouseUp(object sender, MouseEventArgs e)
         {
+            SaveObjectsState(objectsToDraw);
             Cursor = Cursors.Default;
         }
         #endregion
@@ -280,6 +274,8 @@ namespace Modeling.UI.Forms
             {
                 shape.XYProjection();
             }
+
+            MoveSceneToScreensCenter();
             On_MainForm_Paint(null, null);
         }
 
@@ -289,6 +285,7 @@ namespace Modeling.UI.Forms
             {
                 shape.YZProjection();
             }
+            MoveSceneToScreensCenter();
             On_MainForm_Paint(null, null);
         }
 
@@ -298,32 +295,60 @@ namespace Modeling.UI.Forms
             {
                 shape.XZProjection();
             }
+            MoveSceneToScreensCenter();
             On_MainForm_Paint(null, null);
         }
 
-        private void On_miXYintel_Click(object sender, EventArgs e)
+        private void On_miAksonometricProjection_Click(object sender, EventArgs e)
         {
-            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha + Math.PI / 2, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            RotateObjects(objectsToDraw, 0, Math.PI / 2, 0);
+            var aksonometricProjectionForm = new AksonometricProjectionForm();
+            if (DialogResult.OK != aksonometricProjectionForm.ShowDialog(this))
+                return;
+            var psi = Convert.ToDouble(aksonometricProjectionForm.tbPsi.Text) * Math.PI / 180;
+            var phi = Convert.ToDouble(aksonometricProjectionForm.tbPhi.Text) * Math.PI / 180;
+
+            foreach (var shape in objectsToDraw)
+            {
+                shape.AksonometricProjection(psi, phi);
+            }
+
             On_MainForm_Paint(null, null);
         }
 
-        private void On_miYZintel_Click(object sender, EventArgs e)
+        private void On_miBevelProjection_Click(object sender, EventArgs e)
         {
-            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            //RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta + Math.PI / 2);
-            RotateObjects(objectsToDraw, 0, 0, Math.PI / 2);
+            var bevelProjectionForm = new BevelProjectionForm();
+
+            if (DialogResult.OK != bevelProjectionForm.ShowDialog(this))
+                return;
+            var L = Convert.ToDouble(bevelProjectionForm.tbL.Text);
+            var alpha = Convert.ToDouble(bevelProjectionForm.tbAlpha.Text) * Math.PI / 180;
+
+
+            foreach (var shape in objectsToDraw)
+            {
+                shape.BevelProjection(L, alpha);
+            }
+
             On_MainForm_Paint(null, null);
         }
 
-        private void On_miXZintel_Click(object sender, EventArgs e)
+        private void On_miPerspectiveProjection_Click(object sender, EventArgs e)
         {
-            basePoint = ((CoordinateAxises)objectsToDraw[0]).BasePoint;
-            SaveObjectsState(objectsToDraw);
-            // RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            RotateObjects(objectsToDraw, 0, -((CoordinateAxises)objectsToDraw[0]).Alpha, -((CoordinateAxises)objectsToDraw[0]).Beta);
-            On_MainForm_Paint(null, null);
+            var perspectiveProjectionForm = new PerspectiveProjectionForm();
+            if (DialogResult.OK != perspectiveProjectionForm.ShowDialog(this))
+                return;
+
+            float d;
+            if (Single.TryParse(perspectiveProjectionForm.tbD.Text, out d))
+            {
+                ReInitPolyShape();
+                polyShape.SaveState();
+                polyShape.PerspectiveProjection(d);
+                DrawObjectsWithoutHiddenEdges();
+            }
+            else
+                MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
         }
 
         private void On_miSave_Click(object sender, EventArgs e)
@@ -349,6 +374,20 @@ namespace Modeling.UI.Forms
             ReInitPolyShape();
         }
 
+        private void On_cbDrawPerspective_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!cbDrawPerspective.Checked)
+                return;
+            var perspectiveProjectionForm = new PerspectiveProjectionForm();
+            if (DialogResult.OK != perspectiveProjectionForm.ShowDialog(this))
+            {
+                cbDrawPerspective.Checked = false;
+                return;
+            }
+
+            if (!Single.TryParse(perspectiveProjectionForm.tbD.Text, out d))
+                MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
+        }
         #endregion
 
         #region Actions with objects
@@ -390,7 +429,7 @@ namespace Modeling.UI.Forms
 
             foreach (var obj in objsToDraw)
             {
-                obj.Draw(device);
+                obj.Draw(device, Color.GreenYellow);
             }
             device.EndScene();
             device.Present();
@@ -398,21 +437,18 @@ namespace Modeling.UI.Forms
 
         public void DrawObjectsWithDXWithoutHiddenEdges(List<BaseShape> objsToDraw)
         {
-            var allSides = new List<Side>();
-
-            foreach (var obj in objsToDraw)
-            {
-                allSides.AddRange(obj.sides);
-            }
-
-            allSides.Sort(CompareSidesByDepth);
-
-            var polyShape = new BaseShape{sides = allSides};
+            ReInitPolyShape();
 
             device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
             device.BeginScene();
 
-            polyShape.Draw(device);
+            if (cbDrawPerspective.Checked)
+            {
+                polyShape.SaveState();
+                polyShape.PerspectiveProjection(d);
+            }
+            polyShape.SaveState();
+            polyShape.Draw(device, Color.GreenYellow);
 
             device.EndScene();
             device.Present();
@@ -426,25 +462,12 @@ namespace Modeling.UI.Forms
             }
         }
 
-        private void RotateObjects(IList<BaseShape> objsToDraw, double rotAngleX, double rotAngleY, double rotAngleZ)
+        private void RotateObjects(IEnumerable<BaseShape> objsToDraw, double rotAngleX, double rotAngleY, double rotAngleZ)
         {
-            var g = CreateGraphics();
-            g.DrawString(String.Format("Alpha   : {0}", ((CoordinateAxises)objectsToDraw[0]).Alpha), Font, Brushes.White, 10, Height - 100);
-            g.DrawString(String.Format("Beta    : {0}", ((CoordinateAxises)objectsToDraw[0]).Beta), Font, Brushes.White, 10, Height - 90);
-
-            ((CoordinateAxises)objsToDraw[0]).Alpha += rotAngleY;
-            ((CoordinateAxises)objsToDraw[0]).Beta += rotAngleZ;
-
-            at.Alpha = ((CoordinateAxises)objsToDraw[0]).Alpha.ToString();
-            at.Beta = ((CoordinateAxises)objsToDraw[0]).Beta.ToString();
-
-
-            g.DrawString(String.Format("Alpha   : {0}", ((CoordinateAxises)objectsToDraw[0]).Alpha), Font, Brushes.Black, 10, Height - 100);
-            g.DrawString(String.Format("Beta    : {0}", ((CoordinateAxises)objectsToDraw[0]).Beta), Font, Brushes.Black, 10, Height - 90);
-
             foreach (var obj in objsToDraw)
             {
                 obj.Rotate(basePoint, rotAngleX, rotAngleY, rotAngleZ);
+                // obj.Rotate(new Point3D((float)Width / 2, (float)Height / 2, 0), rotAngleX, rotAngleY, rotAngleZ);
             }
         }
 
@@ -471,11 +494,23 @@ namespace Modeling.UI.Forms
                 obj.SaveState();
             }
         }
+
+        private void MoveSceneToScreensCenter()
+        {
+            var curBasePoint = ((CoordinateAxises)objectsToDraw[0]).BasePoint;
+
+            var dx = (float)Width / 2 - curBasePoint.X;
+            var dy = (float)Height / 2 - curBasePoint.Y;
+
+            SaveObjectsState(objectsToDraw);
+            MoveObjects(objectsToDraw, dx, -dy, 0);
+        }
         #endregion
 
         private void ReInitPolyShape()
         {
-            var allSides = new List<Side>();
+            // var coordinateAxises = (CoordinateAxises) objectsToDraw[0];
+            var allSides = new List<Polygon>();
 
             foreach (var obj in objectsToDraw)
             {
@@ -485,9 +520,13 @@ namespace Modeling.UI.Forms
             allSides.Sort(CompareSidesByDepth);
 
             polyShape = new BaseShape { sides = allSides };
+
+            //objectsToDraw.Clear();
+            //objectsToDraw.Add(coordinateAxises);
+            //objectsToDraw.Add(polyShape);
         }
 
-        private static int CompareSidesByDepth(Side one, Side two)
+        private static int CompareSidesByDepth(Polygon one, Polygon two)
         {
             if (one == null)
             {

@@ -35,13 +35,14 @@
             this.miXY = new System.Windows.Forms.ToolStripMenuItem();
             this.miYZ = new System.Windows.Forms.ToolStripMenuItem();
             this.miXZ = new System.Windows.Forms.ToolStripMenuItem();
-            this.miXYintel = new System.Windows.Forms.ToolStripMenuItem();
-            this.miYZintel = new System.Windows.Forms.ToolStripMenuItem();
-            this.miXZintel = new System.Windows.Forms.ToolStripMenuItem();
+            this.miAksonometricProjection = new System.Windows.Forms.ToolStripMenuItem();
+            this.miBevelProjection = new System.Windows.Forms.ToolStripMenuItem();
+            this.perspectiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miSave = new System.Windows.Forms.ToolStripMenuItem();
             this.miReload = new System.Windows.Forms.ToolStripMenuItem();
             this.cbUseDirectX = new System.Windows.Forms.CheckBox();
             this.cbHideEdges = new System.Windows.Forms.CheckBox();
+            this.cbDrawPerspective = new System.Windows.Forms.CheckBox();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,9 +71,9 @@
             this.miXY,
             this.miYZ,
             this.miXZ,
-            this.miXYintel,
-            this.miYZintel,
-            this.miXZintel});
+            this.miAksonometricProjection,
+            this.miBevelProjection,
+            this.perspectiveToolStripMenuItem});
             this.miProjections.Name = "miProjections";
             this.miProjections.Size = new System.Drawing.Size(78, 20);
             this.miProjections.Text = "Projections";
@@ -80,44 +81,44 @@
             // miXY
             // 
             this.miXY.Name = "miXY";
-            this.miXY.Size = new System.Drawing.Size(119, 22);
+            this.miXY.Size = new System.Drawing.Size(152, 22);
             this.miXY.Text = "XY";
             this.miXY.Click += new System.EventHandler(this.On_miXY_Click);
             // 
             // miYZ
             // 
             this.miYZ.Name = "miYZ";
-            this.miYZ.Size = new System.Drawing.Size(119, 22);
+            this.miYZ.Size = new System.Drawing.Size(152, 22);
             this.miYZ.Text = "YZ";
             this.miYZ.Click += new System.EventHandler(this.On_miYZ_Click);
             // 
             // miXZ
             // 
             this.miXZ.Name = "miXZ";
-            this.miXZ.Size = new System.Drawing.Size(119, 22);
+            this.miXZ.Size = new System.Drawing.Size(152, 22);
             this.miXZ.Text = "XZ";
             this.miXZ.Click += new System.EventHandler(this.On_miXZ_Click);
             // 
-            // miXYintel
+            // miAksonometricProjection
             // 
-            this.miXYintel.Name = "miXYintel";
-            this.miXYintel.Size = new System.Drawing.Size(119, 22);
-            this.miXYintel.Text = "XY(intel)";
-            this.miXYintel.Click += new System.EventHandler(this.On_miXYintel_Click);
+            this.miAksonometricProjection.Name = "miAksonometricProjection";
+            this.miAksonometricProjection.Size = new System.Drawing.Size(152, 22);
+            this.miAksonometricProjection.Text = "Aksonometric";
+            this.miAksonometricProjection.Click += new System.EventHandler(this.On_miAksonometricProjection_Click);
             // 
-            // miYZintel
+            // miBevelProjection
             // 
-            this.miYZintel.Name = "miYZintel";
-            this.miYZintel.Size = new System.Drawing.Size(119, 22);
-            this.miYZintel.Text = "YZ(intel)";
-            this.miYZintel.Click += new System.EventHandler(this.On_miYZintel_Click);
+            this.miBevelProjection.Name = "miBevelProjection";
+            this.miBevelProjection.Size = new System.Drawing.Size(152, 22);
+            this.miBevelProjection.Text = "Bevel";
+            this.miBevelProjection.Click += new System.EventHandler(this.On_miBevelProjection_Click);
             // 
-            // miXZintel
+            // perspectiveToolStripMenuItem
             // 
-            this.miXZintel.Name = "miXZintel";
-            this.miXZintel.Size = new System.Drawing.Size(119, 22);
-            this.miXZintel.Text = "XZ(intel)";
-            this.miXZintel.Click += new System.EventHandler(this.On_miXZintel_Click);
+            this.perspectiveToolStripMenuItem.Name = "perspectiveToolStripMenuItem";
+            this.perspectiveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.perspectiveToolStripMenuItem.Text = "Perspective";
+            this.perspectiveToolStripMenuItem.Click += new System.EventHandler(this.On_miPerspectiveProjection_Click);
             // 
             // miSave
             // 
@@ -161,12 +162,26 @@
             this.cbHideEdges.UseVisualStyleBackColor = true;
             this.cbHideEdges.CheckedChanged += new System.EventHandler(this.On_cbHideEdges_CheckedChanged);
             // 
+            // cbDrawPerspective
+            // 
+            this.cbDrawPerspective.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbDrawPerspective.AutoSize = true;
+            this.cbDrawPerspective.BackColor = System.Drawing.Color.Transparent;
+            this.cbDrawPerspective.Location = new System.Drawing.Point(723, 75);
+            this.cbDrawPerspective.Name = "cbDrawPerspective";
+            this.cbDrawPerspective.Size = new System.Drawing.Size(109, 17);
+            this.cbDrawPerspective.TabIndex = 3;
+            this.cbDrawPerspective.Text = "Draw perspective";
+            this.cbDrawPerspective.UseVisualStyleBackColor = false;
+            this.cbDrawPerspective.CheckedChanged += new System.EventHandler(this.On_cbDrawPerspective_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(818, 540);
+            this.Controls.Add(this.cbDrawPerspective);
             this.Controls.Add(this.cbHideEdges);
             this.Controls.Add(this.cbUseDirectX);
             this.Controls.Add(this.mainMenu);
@@ -203,9 +218,10 @@
         private System.Windows.Forms.ToolStripMenuItem miSave;
         private System.Windows.Forms.CheckBox cbUseDirectX;
         private System.Windows.Forms.ToolStripMenuItem miReload;
-        private System.Windows.Forms.ToolStripMenuItem miXYintel;
-        private System.Windows.Forms.ToolStripMenuItem miYZintel;
-        private System.Windows.Forms.ToolStripMenuItem miXZintel;
         private System.Windows.Forms.CheckBox cbHideEdges;
+        private System.Windows.Forms.ToolStripMenuItem perspectiveToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbDrawPerspective;
+        private System.Windows.Forms.ToolStripMenuItem miAksonometricProjection;
+        private System.Windows.Forms.ToolStripMenuItem miBevelProjection;
     }
 }

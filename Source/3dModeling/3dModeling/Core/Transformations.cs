@@ -29,24 +29,24 @@ namespace Modeling.Core
 
         #region Rotation
         /// <summary>
-        /// Rotates gived side relatively current base point
+        /// Rotates gived polygon relatively current base point
         /// </summary>
-        /// <param name="basePoint">The Point relative wich side will rotate.</param>
-        /// <param name="side">Side to be rotated.</param>
+        /// <param name="basePoint">The Point relative wich polygon will rotate.</param>
+        /// <param name="polygon">Side to be rotated.</param>
         /// <param name="angleX">The rotation angle around X-axis.</param>
         /// <param name="angleY">The rotation angle around Y-axis.</param>
         /// <param name="angleZ">The rotation angle around Z-axis.</param>
-        /// <returns>Rotated side.</returns>
-        public Side RotateSide(Point3D basePoint, Side side, double angleX, double angleY, double angleZ)
+        /// <returns>Rotated polygon.</returns>
+        public Polygon RotateSide(Point3D basePoint, Polygon polygon, double angleX, double angleY, double angleZ)
         {
             var rotatedEdges = new List<Edge>();
 
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 rotatedEdges.Add(RotateEdge(basePoint, edge, angleX, angleY, angleZ));
             }
 
-            return new Side { Edges = rotatedEdges };
+            return new Polygon { Edges = rotatedEdges };
         }
 
         public Edge RotateEdge(Point3D basePoint, Edge edge, double angleX, double angleY, double angleZ)
@@ -122,14 +122,14 @@ namespace Modeling.Core
         #endregion
 
         #region Scale
-        public static Side ScaleSide(Point3D basePoint, Side side, float scaleX, float scaleY, float scaleZ)
+        public static Polygon ScaleSide(Point3D basePoint, Polygon polygon, float scaleX, float scaleY, float scaleZ)
         {
             var scaledEdges = new List<Edge>();
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 scaledEdges.Add(ScaleEdge(basePoint, edge, scaleX, scaleY, scaleZ));
             }
-            return new Side { Edges = scaledEdges };
+            return new Polygon { Edges = scaledEdges };
         }
 
         public static Edge ScaleEdge(Point3D basePoint, Edge edge, float scale)
@@ -195,14 +195,14 @@ namespace Modeling.Core
         #endregion
 
         #region Move
-        public static Side MoveSide(Side side, float dX, float dY, float dZ)
+        public static Polygon MoveSide(Polygon polygon, float dX, float dY, float dZ)
         {
             var movedEdges = new List<Edge>();
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 movedEdges.Add(MoveEdge(edge, dX, dY, dZ));
             }
-            return new Side {Edges = movedEdges};
+            return new Polygon { Edges = movedEdges };
         }
 
         public static Edge MoveEdge(Edge edge, float dX, float dY, float dZ)
@@ -228,37 +228,80 @@ namespace Modeling.Core
         #endregion
 
         #region Projections
-        public static Side XYProjection(Side side)
+        public static Polygon XYProjection(Polygon polygon)
         {
             var edges = new List<Edge>();
 
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 edges.Add(new Edge(XYProjection(edge.Vertex1), XYProjection(edge.Vertex2)));
             }
-            return new Side { Edges = edges };
+            return new Polygon { Edges = edges };
         }
 
-        public static Side YZProjection(Side side)
+        public static Polygon YZProjection(Polygon polygon)
         {
             var edges = new List<Edge>();
 
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 edges.Add(new Edge(YZProjection(edge.Vertex1), YZProjection(edge.Vertex2)));
             }
-            return new Side { Edges = edges };
+            return new Polygon { Edges = edges };
         }
 
-        public static Side XZProjection(Side side)
+        public static Polygon XZProjection(Polygon polygon)
         {
             var edges = new List<Edge>();
 
-            foreach (var edge in side.Edges)
+            foreach (var edge in polygon.Edges)
             {
                 edges.Add(new Edge(XZProjection(edge.Vertex1), XZProjection(edge.Vertex2)));
             }
-            return new Side { Edges = edges };
+            return new Polygon { Edges = edges };
+        }
+
+        public static Polygon AksonometricProjection(Polygon polygon, double psi, double phi)
+        {
+            var edges = new List<Edge>();
+
+            foreach (var edge in polygon.Edges)
+            {
+                edges.Add(new Edge(AksonometricProjection(edge.Vertex1, psi, phi), AksonometricProjection(edge.Vertex2, psi, phi)));
+            }
+            return new Polygon { Edges = edges };
+        }
+
+        public static Polygon BevelProjection(Polygon polygon, double L, double alpha)
+        {
+            var edges = new List<Edge>();
+
+            foreach (var edge in polygon.Edges)
+            {
+                edges.Add(new Edge(BevelProjection(edge.Vertex1, L, alpha), BevelProjection(edge.Vertex2, L, alpha)));
+            }
+            return new Polygon { Edges = edges };
+        }
+
+        public static Polygon PerspectiveProjection(Polygon polygon, float d)
+        {
+            var edges = new List<Edge>();
+
+            foreach (var edge in polygon.Edges)
+            {
+                edges.Add(new Edge(PerspectiveProjection(edge.Vertex1, d), PerspectiveProjection(edge.Vertex2, d)));
+            }
+            //return new Polygon { Edges = edges };
+
+
+            var initialVerteces = polygon.Verteces;
+            var newVerteces = new List<Point3D>();
+            foreach (var vertex in initialVerteces)
+            {
+                newVerteces.Add(PerspectiveProjection(vertex, d));
+            }
+
+            return new Polygon { Verteces = newVerteces, Edges = edges };
         }
 
         public static Edge XYProjection(Edge edge)
@@ -276,19 +319,125 @@ namespace Modeling.Core
             return new Edge(XZProjection(edge.Vertex1), XZProjection(edge.Vertex2));
         }
 
+        public static Edge AksonometricProjection(Edge edge, double psi, double phi)
+        {
+            return new Edge(AksonometricProjection(edge.Vertex1, psi, phi), AksonometricProjection(edge.Vertex2, psi, phi));
+        }
+
+        public static Edge BevelProjection(Edge edge, double L, double alpha)
+        {
+            return new Edge(BevelProjection(edge.Vertex1, L, alpha), BevelProjection(edge.Vertex2, L, alpha));
+        }
+
+        public static Edge PerspectiveProjection(Edge edge, float d)
+        {
+            return new Edge(PerspectiveProjection(edge.Vertex1, d), PerspectiveProjection(edge.Vertex2, d));
+        }
+
         private static Point3D XYProjection(Point3D p)
         {
-            return new Point3D(p.X, p.Y, 0);
+            return new Point3D(p.X, p.Y, p.Z);
         }
 
         private static Point3D YZProjection(Point3D p)
         {
-            return new Point3D(0, p.Y, p.Z);
+            return new Point3D(p.Z, p.Y, p.X);
         }
 
         private static Point3D XZProjection(Point3D p)
         {
-            return new Point3D(p.X, 0, p.Z);
+            return new Point3D(p.X, p.Z, p.Y);
+        }
+
+        private static Point3D AksonometricProjection(Point3D p, double psi, double phi)
+        {
+            var buf = MultiplyPointAndMatrix(p, GetAksonometricMatrix(psi, phi));
+
+            return new Point3D(buf.X, buf.Y, p.Z);
+        }
+
+        private static Point3D BevelProjection(Point3D p, double L, double alpha)
+        {
+            var buf = MultiplyPointAndMatrix(p, GetBevelMatrix(L, alpha));
+
+            return new Point3D(buf.X, buf.Y, p.Z);
+        }
+
+        private static Point3D PerspectiveProjection(Point3D p, float d)
+        {
+            // return new Point3D(p.X / (p.Z / d) + 500, p.Y / (p.Z / d) + 350, d);
+            return new Point3D(p.X / ((p.Z / d) + 1), (p.Y / (p.Z / d) + 1), d);
+            //return new Point3D(p.X / ((p.Z * d) + 1), (p.Y / (p.Z * d) + 1), d);
+            // return new Point3D(p.X / (d * p.Z + 1) + 500, p.Y / (d * p.Z + 1) + 350, p.Z / (d * p.Z + 1));
+            // return new Point3D(p.X , p.Y , 1 / d);
+            // return MultiplyPointAndMatrix(p, GetPerspectiveMatrix(20 * Math.PI / 180, 30 * Math.PI / 180, 400, 1));
+        }
+        #endregion
+
+        #region Math part
+        private static Point3D MultiplyPointAndMatrix(Point3D point, double[,] matrix)
+        {
+            var pointMatrix = new double[] { point.X, point.Y, point.Z, 1 };
+
+            var result = new double[matrix.GetLength(1)];
+
+            for (var i = 0; i < matrix.GetLength(1); i++)
+            {
+                for (var k = 0; k < matrix.GetLength(1); k++)
+                {
+                    result[i] += pointMatrix[k] * matrix[k, i];
+                }
+            }
+
+            return new Point3D((float)result[0], (float)result[1], (float)result[2]);
+        }
+
+        private static double[,] GetAksonometricMatrix(double psi, double phi)
+        {
+            var R = new double[4, 4];
+
+            R[0, 0] = Math.Cos(psi); R[0, 1] = Math.Sin(phi) * Math.Sin(psi); R[0, 2] = 0; R[0, 3] = 0;
+
+            R[1, 0] = 0; R[1, 1] = Math.Cos(phi); R[1, 2] = 0; R[1, 3] = 0;
+
+            R[2, 0] = Math.Sin(psi); R[2, 1] = -1 * Math.Sin(phi) * Math.Cos(psi); R[2, 2] = 0; R[2, 3] = 0;
+
+            R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = 0; R[3, 3] = 1;
+
+            return R;
+        }
+
+        private static double[,] GetBevelMatrix(double L, double alpha)
+        {
+            var R = new double[4, 4];
+
+            R[0, 0] = 1; R[0, 1] = 0; R[0, 2] = 0; R[0, 3] = 0;
+
+            R[1, 0] = 0; R[1, 1] = 1; R[1, 2] = 0; R[1, 3] = 0;
+
+            R[2, 0] = L * Math.Cos(alpha); R[2, 1] = L * Math.Sin(alpha); R[2, 2] = 0; R[2, 3] = 0;
+
+            R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = 0; R[3, 3] = 1;
+
+            return R;
+        }
+
+        private static double[,] GetPerspectiveMatrix(double tetta, double phi, double d, double r)
+        {
+            var R = new double[4, 4];
+
+            //R[0, 0] = Math.Cos(tetta); R[0, 1] = -Math.Cos(phi) * Math.Sin(tetta); R[0, 2] = -Math.Sin(phi) * Math.Sin(tetta); R[0, 3] = 0;
+            //R[1, 0] = Math.Sin(tetta); R[1, 1] = Math.Cos(phi) * Math.Cos(tetta); R[1, 2] = Math.Sin(phi) * Math.Cos(tetta); R[1, 3] = 0;
+            //R[2, 0] = 0; R[2, 1] = Math.Sin(phi); R[2, 2] = -Math.Cos(phi); R[2, 3] = 0;
+            //R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = r; R[3, 3] = 1;
+
+            R[0, 0] = -Math.Sin(tetta); R[0, 1] = -Math.Cos(phi) * Math.Cos(tetta); R[0, 2] = -Math.Sin(phi) * Math.Cos(tetta); R[0, 3] = 0;
+            R[1, 0] = Math.Cos(tetta); R[1, 1] = -Math.Cos(phi) * Math.Sin(tetta); R[1, 2] = -Math.Sin(phi) * Math.Sin(tetta); R[1, 3] = 0;
+            R[2, 0] = 0; R[2, 1] = Math.Sin(phi); R[2, 2] = -Math.Cos(phi); R[2, 3] = 1/ d;
+            R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = r; R[3, 3] = 1;
+
+
+            return R;
         }
         #endregion
     }
