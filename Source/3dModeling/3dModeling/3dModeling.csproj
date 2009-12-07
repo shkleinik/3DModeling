@@ -67,7 +67,6 @@
       <HintPath>Binaries\Microsoft.DirectX.Direct3D.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -149,6 +148,12 @@
     </Compile>
     <Compile Include="UI\Forms\EditForms\ScalePrimitiveForm.Designer.cs">
       <DependentUpon>ScalePrimitiveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\Light\ChangeLightSourceLocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\Light\ChangeLightSourceLocationForm.Designer.cs">
+      <DependentUpon>ChangeLightSourceLocationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -246,6 +251,10 @@
     <Content Include="Icons\Logo.ico" />
     <EmbeddedResource Include="UI\Controls\AnglesTracker.resx">
       <DependentUpon>AnglesTracker.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\Light\ChangeLightSourceLocationForm.resx">
+      <DependentUpon>ChangeLightSourceLocationForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\ProjectionsForms\AksonometricProjectionForm.resx">

@@ -10,21 +10,20 @@
             InitializeComponent();
         }
 
-        private void On_PerspectiveProjectionForm_Load(object sender, EventArgs e)
-        {
-            lblPerspectiveProjectionInfo.Text =
-                "The entered value would be use in the following formula:\n      [X / (Z / d)  Y / (Z / d)  d]\n";
-        }
-
         private void On_btnOk_Click(object sender, EventArgs e)
         {
-            float d;
-            if (!Single.TryParse(tbD.Text, out d))
+            double tetta;
+            double phi;
+            double r;
+            double d;
+
+            if (Double.TryParse(tbTetta.Text, out tetta) && Double.TryParse(tbPhi.Text, out phi) && Double.TryParse(tbR.Text, out r) && Double.TryParse(tbD.Text, out d))
             {
-                MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
+                DialogResult = DialogResult.OK;
                 return;
             }
-            DialogResult = DialogResult.OK;
+
+            MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
         }
     }
 }

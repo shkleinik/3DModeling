@@ -33,6 +33,9 @@ namespace Modeling.Core.Elements
         {
             get
             {
+                if (Verteces.Count < 3)
+                    return new List<Edge>();
+
                 var edges = new List<Edge>
                             {
                                 new Edge(Verteces[0], Verteces[1]),

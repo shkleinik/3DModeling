@@ -72,7 +72,11 @@ namespace Modeling.Core.Shapes
         /// Overrides base method Draw to render colored axises instead sided shape.
         /// </summary>
         /// <param name="g">Graphics context from redering form.</param>
-        public override void Draw(Graphics g, Color color)
+        /// <param name="lightSource">Location of the sun :) </param>
+        /// <param name="color">Specifies the base color of the shape.</param>
+        /// <param name="fill"> Determines if polygons would be filled with<see cref="color"/>.</param>
+        /// <param name="drawEdges">Determines if polygons would be drawn.</param>
+        public override void Draw(Graphics g, Vertex lightSource, Color color, bool fill, bool drawEdges)
         {
             g.DrawLine(new Pen(Color.Blue, 3F), sides[0].Verteces[0], sides[0].Verteces[1]);
             g.DrawLine(new Pen(Color.Red, 3F), sides[0].Verteces[0], sides[0].Verteces[2]);
@@ -81,7 +85,7 @@ namespace Modeling.Core.Shapes
             previousState = new List<Polygon>(sides);
         }
 
-        public override void Draw(Device device, Color color)
+        public override void Draw(Device device, Vertex lightSource, Color color, bool fill, bool drawEdges)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
             device.DrawUserPrimitives(PrimitiveType.LineList, 1, GetTransformedColoredFromVerteces(sides[0].Verteces[0], sides[0].Verteces[1], Color.Blue));

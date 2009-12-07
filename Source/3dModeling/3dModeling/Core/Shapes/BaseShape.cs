@@ -57,6 +57,22 @@ namespace Modeling.Core.Shapes
                 return cumulativeDepth / sides.Count;
             }
         }
+
+        public float NearestVertex
+        {
+            get
+            {
+                var allVerteces = new List<Vertex>();
+                foreach (var side in sides)
+                {
+                    allVerteces.AddRange(side.Verteces);
+                }
+
+                allVerteces.Sort();
+
+                return allVerteces[allVerteces.Count - 1].Z;
+            }
+        }
         #endregion
 
         #region Constructors
@@ -198,12 +214,12 @@ namespace Modeling.Core.Shapes
             }
         }
 
-        public void PerspectiveProjection(float d)
+        public void PerspectiveProjection(double tetta, double phi, double r, double d)
         {
             sides.Clear();
             foreach (var side in initialSides)
             {
-                sides.Add(Transformations.PerspectiveProjection(side, d));
+                sides.Add(Transformations.PerspectiveProjection(side, tetta, phi, r, d));
             }
         }
         #endregion
@@ -225,19 +241,23 @@ namespace Modeling.Core.Shapes
         /// state as previous to erase itself later.
         /// </summary>
         /// <param name="g">Graphics of form where the shape should be rendered.</param>
-        public virtual void Draw(Graphics g, Color color)
+        /// <param name="lightSource">Location of the sun :) </param>
+        /// <param name="color">Specifies the base color of the shape.</param>
+        /// <param name="fill"> Determines if polygons would be filled with<see cref="color"/>.</param>
+        /// <param name="drawEdges">Determines if polygons would be drawn.</param>
+        public virtual void Draw(Graphics g, Vertex lightSource, Color color, bool fill, bool drawEdges)
         {
             foreach (var side in sides)
             {
-                if (side.Verteces.Count < 2)
-                    continue;
-
                 if (!side.IsVisible)
                     continue;
 
-                g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
+                if (drawEdges)
+                    g.DrawPolygon(new Pen(Brushes.Black, 1F), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
 
-                g.FillPolygon(new SolidBrush(L.GetHalfToneColorForPolygon(side, color)), ConvertPoints3DToPontsF(side.Verteces.ToArray()));
+                if (fill)
+                    g.FillPolygon(new SolidBrush(L.GetHalfToneColorForPolygon(side, lightSource, color)),
+                                                 ConvertPoints3DToPontsF(side.Verteces.ToArray()));
             }
 
             previousState = new List<Polygon>(sides);
@@ -247,8 +267,11 @@ namespace Modeling.Core.Shapes
         /// Overload for DirectX.
         /// </summary>
         /// <param name="device">Draw device(aka your videocard).</param>
+        /// <param name="lightSource">Location of the sun :) </param>
         /// <param name="color">Specifies the color for the figure.</param>
-        public virtual void Draw(Device device, Color color)
+        /// <param name="fill"> Determines if polygons would be filled with<see cref="color"/>.</param>
+        /// <param name="drawEdges">Determines if polygons would be drawn.</param>
+        public virtual void Draw(Device device, Vertex lightSource, Color color, bool fill, bool drawEdges)
         {
             device.VertexFormat = CustomVertex.TransformedColored.Format;
 
@@ -257,11 +280,15 @@ namespace Modeling.Core.Shapes
                 if (!side.IsVisible)
                     continue;
 
-                foreach (var edge in side.Edges)
-                {
-                    device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(edge, Color.Black));
-                }
-                device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1, ConvertSideToTransformedColored(side, L.GetHalfToneColorForPolygon(side, color)));
+                if (drawEdges)
+                    foreach (var edge in side.Edges)
+                    {
+                        device.DrawUserPrimitives(PrimitiveType.LineList, 1, ConvertEdgeToTransformedColored(edge, Color.Black));
+                    }
+
+                if (fill)
+                    device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 1,
+                                              ConvertSideToTransformedColored(side, L.GetHalfToneColorForPolygon(side, lightSource, color)));
             }
         }
 

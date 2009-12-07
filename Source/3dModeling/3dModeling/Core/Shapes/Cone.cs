@@ -18,7 +18,7 @@ namespace Modeling.Core.Shapes
         /// <summary>
         /// Specifies level of approximation for the cone (number of sides with wich circle will be replaced).
         /// </summary>
-        private const int APPORXIMATION_LEVEL = 15;
+        private const int APPORXIMATION_LEVEL = 500;
         #endregion
 
         #region Constructors

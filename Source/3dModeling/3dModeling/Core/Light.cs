@@ -56,9 +56,8 @@ namespace Modeling.Core
                 );
         }
 
-        public static Color GetHalfToneColorForPolygon(Polygon polygon, Color baseColor/*, Vertex lightSource*/)
+        public static Color GetHalfToneColorForPolygon(Polygon polygon, Vertex lightSource, Color baseColor)
         {
-            var lightSource = new Vertex(-1000, 0, 0);
             var normal = GetNormal(polygon);
 
             var cosBetweenNormals = GetAngleBetweenNormals(normal, lightSource);

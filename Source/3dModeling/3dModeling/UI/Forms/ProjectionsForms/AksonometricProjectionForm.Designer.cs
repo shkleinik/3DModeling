@@ -60,6 +60,7 @@
             this.tbPsi.Name = "tbPsi";
             this.tbPsi.Size = new System.Drawing.Size(139, 20);
             this.tbPsi.TabIndex = 2;
+            this.tbPsi.Text = "30";
             // 
             // tbPhi
             // 
@@ -67,6 +68,7 @@
             this.tbPhi.Name = "tbPhi";
             this.tbPhi.Size = new System.Drawing.Size(139, 20);
             this.tbPhi.TabIndex = 3;
+            this.tbPhi.Text = "40";
             // 
             // btnOk
             // 
