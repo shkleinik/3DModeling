@@ -13,10 +13,11 @@ namespace Modeling.UI.Forms
     using System.Windows.Forms;
     using Core.Elements;
     using Core.Shapes;
+    using Light;
     using Microsoft.DirectX.Direct3D;
+    using ProjectionsForms;
     using S = Core.Helpers.Serializator;
     using T = Core.Transformations;
-    using ProjectionsForms;
 
     public partial class MainForm : Form
     {
@@ -36,13 +37,13 @@ namespace Modeling.UI.Forms
         private List<BaseShape> objectsToDraw;
         private BaseShape polyShape;
         private Vertex basePoint;
+        private Vertex lightSource;
         private PointF moveStartPoint;
         private double rotateStartAngle;
 
         private int gridStep = DEFAULT_GRID_STEP;
         private bool allowScale = true;
         private bool isControlPressed;
-        private float d;
         #endregion
 
         #region Properties
@@ -101,22 +102,25 @@ namespace Modeling.UI.Forms
             basePoint = new Vertex((float)Width / 2, (float)Height / 2);
             polyShape = new BaseShape();
             moveStartPoint = basePoint;
+            lightSource = new Vertex(-1000, 0, 0);
 
-            var cube = new Cube(new Vertex(basePoint.X - 300, basePoint.Y + 100, basePoint.Z), 200);
-            var pyramid = new Pyramid(basePoint, 3, 50, 100);
-            var pyramidReverse = new Pyramid(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z + 300), 9, 50, -100);
-            var cone = new Cone(basePoint, 25, 50);
+            // var cube = new Cube(new Vertex(basePoint.X - 300, basePoint.Y + 100, basePoint.Z), 200);
+            var cube = new Cube(basePoint, 200);
+            //var pyramid = new Pyramid(basePoint, 4, 150, 300);
+            //var cone = new Cone(basePoint, 150, -300);
+            //var pyramidReverse = new Pyramid(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z + 300), 9, 50, -100);
             //var axises = new CoordinateAxises(basePoint);
-            var cylinder = new Cylinder(basePoint, 100, 200);
-            var cylinderReverse = new Cylinder(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z), 100, -200);
-            //var prizm = new Prizm(basePoint, 4, (float)(200 / Math.Sqrt(2.0F)), -200);
+            //var cylinder = new Cylinder(basePoint, 100, 200);
+            //var cylinderReverse = new Cylinder(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z), 100, -200);
+            //var prizm = new Prizm(basePoint, 3, (float)(200 / Math.Sqrt(2.0F)), -200);
 
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
-            objectsToDraw.Add(pyramid);
-            objectsToDraw.Add(pyramidReverse);
-            objectsToDraw.Add(cone);
-            objectsToDraw.Add(cylinder);
-            objectsToDraw.Add(cylinderReverse);
+            //objectsToDraw.Add(pyramid);
+            //objectsToDraw.Add(cone);
+            //objectsToDraw.Add(prizm);
+            //objectsToDraw.Add(pyramidReverse);
+            //objectsToDraw.Add(cylinder);
+            //objectsToDraw.Add(cylinderReverse);
             objectsToDraw.Add(cube);
 
             SaveObjectsState(objectsToDraw);
@@ -317,6 +321,7 @@ namespace Modeling.UI.Forms
                 shape.AksonometricProjection(psi, phi);
             }
 
+            MoveSceneToScreensCenter();
             On_MainForm_Paint(null, null);
         }
 
@@ -335,6 +340,7 @@ namespace Modeling.UI.Forms
                 shape.BevelProjection(L, alpha);
             }
 
+            MoveSceneToScreensCenter();
             On_MainForm_Paint(null, null);
         }
 
@@ -344,16 +350,42 @@ namespace Modeling.UI.Forms
             if (DialogResult.OK != perspectiveProjectionForm.ShowDialog(this))
                 return;
 
-            float d;
-            if (Single.TryParse(perspectiveProjectionForm.tbD.Text, out d))
+            double tetta;
+            double phi;
+            double r;
+            double d;
+
+            if (Double.TryParse(perspectiveProjectionForm.tbTetta.Text, out tetta) && Double.TryParse(perspectiveProjectionForm.tbPhi.Text, out phi) && Double.TryParse(perspectiveProjectionForm.tbR.Text, out r) && Double.TryParse(perspectiveProjectionForm.tbD.Text, out d))
             {
-                ReInitPolyShape();
-                polyShape.SaveState();
-                polyShape.PerspectiveProjection(d);
-                DrawObjectsWithoutHiddenEdges();
+                //ReInitPolyShape();
+                //polyShape.SaveState();
+                //polyShape.PerspectiveProjection(tetta, phi, r, d);
+                //DrawObjectsWithoutHiddenEdges();
+                foreach (var shape in objectsToDraw)
+                {
+                    shape.PerspectiveProjection(tetta, phi, r, d);
+                }
+
+                MoveSceneToScreensCenter();
+                On_MainForm_Paint(null, null);
+
             }
             else
                 MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
+        }
+
+        private void On_miChangeLightSourceLocation_Click(object sender, EventArgs e)
+        {
+            var changeLightSourceLocationClick = new ChangeLightSourceLocationForm(lightSource);
+
+
+            if (DialogResult.OK != changeLightSourceLocationClick.ShowDialog(this))
+                return;
+
+            lightSource = new Vertex(Single.Parse(changeLightSourceLocationClick.tbX.Text),
+                                     Single.Parse(changeLightSourceLocationClick.tbY.Text),
+                                     Single.Parse(changeLightSourceLocationClick.tbZ.Text));
+            On_MainForm_Paint(null, null);
         }
 
         private void On_miSave_Click(object sender, EventArgs e)
@@ -379,36 +411,31 @@ namespace Modeling.UI.Forms
             ReInitPolyShape();
         }
 
-        private void On_cbDrawPerspective_CheckedChanged(object sender, EventArgs e)
+        private void On_cbFill_CheckedChanged(object sender, EventArgs e)
         {
-            if (!cbDrawPerspective.Checked)
-                return;
-            var perspectiveProjectionForm = new PerspectiveProjectionForm();
-            if (DialogResult.OK != perspectiveProjectionForm.ShowDialog(this))
-            {
-                cbDrawPerspective.Checked = false;
-                return;
-            }
+            On_MainForm_Paint(null, null);
+        }
 
-            if (!Single.TryParse(perspectiveProjectionForm.tbD.Text, out d))
-                MessageBox.Show("Input string has incorrect format, please correct", "Argument exception");
+        private void On_cbDrawEdges_CheckedChanged(object sender, EventArgs e)
+        {
+            On_MainForm_Paint(null, null);
         }
         #endregion
 
         #region Actions with objects
-        
+
         private void DrawObjects(IEnumerable<BaseShape> objsToDraw)
         {
             foreach (var obj in objsToDraw)
             {
-                obj.Draw(CreateGraphics(), COLOR_TO_DRAW);
+                obj.Draw(CreateGraphics(), lightSource, COLOR_TO_DRAW, cbFill.Checked, cbDrawEdges.Checked);
             }
         }
 
         private void DrawObjectsWithoutHiddenEdges()
         {
             ReInitPolyShape();
-            polyShape.Draw(CreateGraphics(), COLOR_TO_DRAW);
+            polyShape.Draw(CreateGraphics(), lightSource, COLOR_TO_DRAW, cbFill.Checked, cbDrawEdges.Checked);
         }
 
         public void DrawObjectsWithDX(IEnumerable<BaseShape> objsToDraw)
@@ -418,7 +445,7 @@ namespace Modeling.UI.Forms
 
             foreach (var obj in objsToDraw)
             {
-                obj.Draw(device, COLOR_TO_DRAW);
+                obj.Draw(device, lightSource, COLOR_TO_DRAW, cbFill.Checked, cbDrawEdges.Checked);
             }
             device.EndScene();
             device.Present();
@@ -426,29 +453,23 @@ namespace Modeling.UI.Forms
 
         public void DrawObjectsWithDXWithoutHiddenEdges(List<BaseShape> objsToDraw)
         {
-            ReInitPolyShape();
+            //ReInitPolyShape();
 
-            device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
-            device.BeginScene();
+            //device.Clear(ClearFlags.Target, Color.White, 1.0f, 0);
+            //device.BeginScene();
+            //polyShape.SaveState();
+            //polyShape.Draw(device, lightSource, COLOR_TO_DRAW, cbFill.Checked, cbDrawEdges.Checked);
+            //objsToDraw[0].Draw(device, lightSource, COLOR_TO_DRAW, cbFill.Checked, cbDrawEdges.Checked);
 
-            if (cbDrawPerspective.Checked)
-            {
-                polyShape.SaveState();
-                polyShape.PerspectiveProjection(d);
-            }
-            polyShape.SaveState();
-            polyShape.Draw(device, COLOR_TO_DRAW);
-            objsToDraw[0].Draw(device, COLOR_TO_DRAW);
-
-            device.EndScene();
-            device.Present();
+            //device.EndScene();
+            //device.Present();
 
             // do not work for projections
-            //var coordinateAxes = objsToDraw[0];
-            //objsToDraw.Sort(CompareShapesByDepth);
-            //objsToDraw.Remove(coordinateAxes);
-            //objsToDraw.Insert(0, coordinateAxes);
-            //DrawObjectsWithDX(objsToDraw);
+            var coordinateAxes = objsToDraw[0];
+            objsToDraw.Sort(CompareShapesByDepth);
+            objsToDraw.Remove(coordinateAxes);
+            objsToDraw.Insert(0, coordinateAxes);
+            DrawObjectsWithDX(objsToDraw);
         }
 
         private void EraseObjects(IEnumerable<BaseShape> objsToDraw)
@@ -578,34 +599,12 @@ namespace Modeling.UI.Forms
             {
                 if (two == null)
                 {
-                    // If one is null and two is null, they're
-                    // equal. 
                     return 0;
                 }
-                else
-                {
-                    // If one is null and two is not null, two
-                    // is greater. 
-                    return -1;
-                }
+                return -1;
             }
-            else
-            {
-                // If one is not null...
-                //
-                if (two == null)
-                // ...and two is null, one is greater.
-                {
-                    return 1;
-                }
-                else
-                {
-                    // ...and two is not null, compare the 
-                    // lengths of the two strings.
-                    //
-                    return one.Depth.CompareTo(two.Depth);
-                }
-            }
+            return two == null ? 1 : one.Depth.CompareTo(two.Depth);
+            // return one.NearestVertex.CompareTo(two.NearestVertex);
         }
     }
 }

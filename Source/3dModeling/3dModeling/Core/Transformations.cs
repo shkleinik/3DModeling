@@ -205,20 +205,13 @@ namespace Modeling.Core
             return new Polygon { Verteces = verteces };
         }
 
-        public static Polygon PerspectiveProjection(Polygon polygon, float d)
+        public static Polygon PerspectiveProjection(Polygon polygon, double tetta, double phi, double r, double d)
         {
-            //var edges = new List<Edge>();
-
-            //foreach (var edge in polygon.Edges)
-            //{
-            //    edges.Add(new Edge(PerspectiveProjection(edge.Vertex1, d), PerspectiveProjection(edge.Vertex2, d)));
-            //}
-
             var verteces = new List<Vertex>();
 
             foreach (var vertex in polygon.Verteces)
             {
-                verteces.Add(PerspectiveProjection(vertex, d));
+                verteces.Add(PerspectiveProjection(vertex, tetta, phi, r, d));
             }
 
             return new Polygon { Verteces = verteces };
@@ -231,12 +224,12 @@ namespace Modeling.Core
 
         private static Vertex YZProjection(Vertex p)
         {
-            return new Vertex(p.Z, p.Y, p.X);
+            return new Vertex(p.Z, p.Y, -p.X);
         }
 
         private static Vertex XZProjection(Vertex p)
         {
-            return new Vertex(p.X, p.Z, p.Y);
+            return new Vertex(p.X, p.Z, -p.Y);
         }
 
         private static Vertex AksonometricProjection(Vertex p, double psi, double phi)
@@ -253,14 +246,17 @@ namespace Modeling.Core
             return new Vertex(buf.X, buf.Y, p.Z);
         }
 
-        private static Vertex PerspectiveProjection(Vertex p, float d)
+        private static Vertex PerspectiveProjection(Vertex p, double tetta, double phi, double r, double d)
         {
             // return new Point3D(p.X / (p.Z / d) + 500, p.Y / (p.Z / d) + 350, d);
-            return new Vertex(p.X / ((p.Z / d) + 1), (p.Y / (p.Z / d) + 1), d);
-            //return new Point3D(p.X / ((p.Z * d) + 1), (p.Y / (p.Z * d) + 1), d);
+            // return new Vertex(p.X / ((p.Z / d) + 1), (p.Y / (p.Z / d) + 1), d);
+            // return new Vertex(p.X / (float)((p.Z / d) + 1), (p.Y / (float)(p.Z / d) + 1), (float)d);
+            // return new Point3D(p.X / ((p.Z * d) + 1), (p.Y / (p.Z * d) + 1), d);
             // return new Point3D(p.X / (d * p.Z + 1) + 500, p.Y / (d * p.Z + 1) + 350, p.Z / (d * p.Z + 1));
             // return new Point3D(p.X , p.Y , 1 / d);
-            // return MultiplyPointAndMatrix(p, GetPerspectiveMatrix(20 * Math.PI / 180, 30 * Math.PI / 180, 400, 1));
+
+            var buf = MultiplyPointAndMatrix(p, GetPerspectiveMatrix(tetta * Math.PI / 180, phi * Math.PI / 180, r, d));
+            return new Vertex(buf.X, buf.Y, p.Z);
         }
         #endregion
 
@@ -312,20 +308,19 @@ namespace Modeling.Core
             return R;
         }
 
-        private static double[,] GetPerspectiveMatrix(double tetta, double phi, double d, double r)
+        private static double[,] GetPerspectiveMatrix(double tetta, double phi, double r, double d)
         {
             var R = new double[4, 4];
 
             //R[0, 0] = Math.Cos(tetta); R[0, 1] = -Math.Cos(phi) * Math.Sin(tetta); R[0, 2] = -Math.Sin(phi) * Math.Sin(tetta); R[0, 3] = 0;
             //R[1, 0] = Math.Sin(tetta); R[1, 1] = Math.Cos(phi) * Math.Cos(tetta); R[1, 2] = Math.Sin(phi) * Math.Cos(tetta); R[1, 3] = 0;
-            //R[2, 0] = 0; R[2, 1] = Math.Sin(phi); R[2, 2] = -Math.Cos(phi); R[2, 3] = 0;
+            //R[2, 0] = 0; R[2, 1] = Math.Sin(phi); R[2, 2] = -Math.Cos(phi); R[2, 3] = 1/d;
             //R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = r; R[3, 3] = 1;
 
             R[0, 0] = -Math.Sin(tetta); R[0, 1] = -Math.Cos(phi) * Math.Cos(tetta); R[0, 2] = -Math.Sin(phi) * Math.Cos(tetta); R[0, 3] = 0;
             R[1, 0] = Math.Cos(tetta); R[1, 1] = -Math.Cos(phi) * Math.Sin(tetta); R[1, 2] = -Math.Sin(phi) * Math.Sin(tetta); R[1, 3] = 0;
             R[2, 0] = 0; R[2, 1] = Math.Sin(phi); R[2, 2] = -Math.Cos(phi); R[2, 3] = 1 / d;
             R[3, 0] = 0; R[3, 1] = 0; R[3, 2] = r; R[3, 3] = 1;
-
 
             return R;
         }

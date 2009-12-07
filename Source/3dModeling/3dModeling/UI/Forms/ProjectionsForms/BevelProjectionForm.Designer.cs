@@ -60,6 +60,7 @@
             this.tbL.Name = "tbL";
             this.tbL.Size = new System.Drawing.Size(100, 20);
             this.tbL.TabIndex = 2;
+            this.tbL.Text = "0,5";
             // 
             // tbAlpha
             // 
@@ -67,6 +68,7 @@
             this.tbAlpha.Name = "tbAlpha";
             this.tbAlpha.Size = new System.Drawing.Size(100, 20);
             this.tbAlpha.TabIndex = 3;
+            this.tbAlpha.Text = "63";
             // 
             // btnOk
             // 

@@ -38,11 +38,13 @@
             this.miAksonometricProjection = new System.Windows.Forms.ToolStripMenuItem();
             this.miBevelProjection = new System.Windows.Forms.ToolStripMenuItem();
             this.perspectiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miChangeLightSourceLocation = new System.Windows.Forms.ToolStripMenuItem();
             this.miSave = new System.Windows.Forms.ToolStripMenuItem();
             this.miReload = new System.Windows.Forms.ToolStripMenuItem();
             this.cbUseDirectX = new System.Windows.Forms.CheckBox();
             this.cbHideEdges = new System.Windows.Forms.CheckBox();
-            this.cbDrawPerspective = new System.Windows.Forms.CheckBox();
+            this.cbFill = new System.Windows.Forms.CheckBox();
+            this.cbDrawEdges = new System.Windows.Forms.CheckBox();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,6 +53,7 @@
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miObjectsToRender,
             this.miProjections,
+            this.miChangeLightSourceLocation,
             this.miSave,
             this.miReload});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
@@ -81,44 +84,51 @@
             // miXY
             // 
             this.miXY.Name = "miXY";
-            this.miXY.Size = new System.Drawing.Size(152, 22);
+            this.miXY.Size = new System.Drawing.Size(148, 22);
             this.miXY.Text = "XY";
             this.miXY.Click += new System.EventHandler(this.On_miXY_Click);
             // 
             // miYZ
             // 
             this.miYZ.Name = "miYZ";
-            this.miYZ.Size = new System.Drawing.Size(152, 22);
+            this.miYZ.Size = new System.Drawing.Size(148, 22);
             this.miYZ.Text = "YZ";
             this.miYZ.Click += new System.EventHandler(this.On_miYZ_Click);
             // 
             // miXZ
             // 
             this.miXZ.Name = "miXZ";
-            this.miXZ.Size = new System.Drawing.Size(152, 22);
+            this.miXZ.Size = new System.Drawing.Size(148, 22);
             this.miXZ.Text = "XZ";
             this.miXZ.Click += new System.EventHandler(this.On_miXZ_Click);
             // 
             // miAksonometricProjection
             // 
             this.miAksonometricProjection.Name = "miAksonometricProjection";
-            this.miAksonometricProjection.Size = new System.Drawing.Size(152, 22);
+            this.miAksonometricProjection.Size = new System.Drawing.Size(148, 22);
             this.miAksonometricProjection.Text = "Aksonometric";
             this.miAksonometricProjection.Click += new System.EventHandler(this.On_miAksonometricProjection_Click);
             // 
             // miBevelProjection
             // 
             this.miBevelProjection.Name = "miBevelProjection";
-            this.miBevelProjection.Size = new System.Drawing.Size(152, 22);
+            this.miBevelProjection.Size = new System.Drawing.Size(148, 22);
             this.miBevelProjection.Text = "Bevel";
             this.miBevelProjection.Click += new System.EventHandler(this.On_miBevelProjection_Click);
             // 
             // perspectiveToolStripMenuItem
             // 
             this.perspectiveToolStripMenuItem.Name = "perspectiveToolStripMenuItem";
-            this.perspectiveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.perspectiveToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.perspectiveToolStripMenuItem.Text = "Perspective";
             this.perspectiveToolStripMenuItem.Click += new System.EventHandler(this.On_miPerspectiveProjection_Click);
+            // 
+            // miChangeLightSourceLocation
+            // 
+            this.miChangeLightSourceLocation.Name = "miChangeLightSourceLocation";
+            this.miChangeLightSourceLocation.Size = new System.Drawing.Size(171, 20);
+            this.miChangeLightSourceLocation.Text = "Change light source location";
+            this.miChangeLightSourceLocation.Click += new System.EventHandler(this.On_miChangeLightSourceLocation_Click);
             // 
             // miSave
             // 
@@ -162,18 +172,33 @@
             this.cbHideEdges.UseVisualStyleBackColor = true;
             this.cbHideEdges.CheckedChanged += new System.EventHandler(this.On_cbHideEdges_CheckedChanged);
             // 
-            // cbDrawPerspective
+            // cbFill
             // 
-            this.cbDrawPerspective.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbDrawPerspective.AutoSize = true;
-            this.cbDrawPerspective.BackColor = System.Drawing.Color.Transparent;
-            this.cbDrawPerspective.Location = new System.Drawing.Point(723, 75);
-            this.cbDrawPerspective.Name = "cbDrawPerspective";
-            this.cbDrawPerspective.Size = new System.Drawing.Size(109, 17);
-            this.cbDrawPerspective.TabIndex = 3;
-            this.cbDrawPerspective.Text = "Draw perspective";
-            this.cbDrawPerspective.UseVisualStyleBackColor = false;
-            this.cbDrawPerspective.CheckedChanged += new System.EventHandler(this.On_cbDrawPerspective_CheckedChanged);
+            this.cbFill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbFill.AutoSize = true;
+            this.cbFill.Checked = true;
+            this.cbFill.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbFill.Location = new System.Drawing.Point(723, 75);
+            this.cbFill.Name = "cbFill";
+            this.cbFill.Size = new System.Drawing.Size(83, 17);
+            this.cbFill.TabIndex = 4;
+            this.cbFill.Text = "Fill polygons";
+            this.cbFill.UseVisualStyleBackColor = true;
+            this.cbFill.CheckedChanged += new System.EventHandler(this.On_cbFill_CheckedChanged);
+            // 
+            // cbDrawEdges
+            // 
+            this.cbDrawEdges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbDrawEdges.AutoSize = true;
+            this.cbDrawEdges.Checked = true;
+            this.cbDrawEdges.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDrawEdges.Location = new System.Drawing.Point(723, 99);
+            this.cbDrawEdges.Name = "cbDrawEdges";
+            this.cbDrawEdges.Size = new System.Drawing.Size(83, 17);
+            this.cbDrawEdges.TabIndex = 5;
+            this.cbDrawEdges.Text = "Draw edges";
+            this.cbDrawEdges.UseVisualStyleBackColor = true;
+            this.cbDrawEdges.CheckedChanged += new System.EventHandler(this.On_cbDrawEdges_CheckedChanged);
             // 
             // MainForm
             // 
@@ -181,7 +206,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(818, 540);
-            this.Controls.Add(this.cbDrawPerspective);
+            this.Controls.Add(this.cbDrawEdges);
+            this.Controls.Add(this.cbFill);
             this.Controls.Add(this.cbHideEdges);
             this.Controls.Add(this.cbUseDirectX);
             this.Controls.Add(this.mainMenu);
@@ -220,8 +246,10 @@
         private System.Windows.Forms.ToolStripMenuItem miReload;
         private System.Windows.Forms.CheckBox cbHideEdges;
         private System.Windows.Forms.ToolStripMenuItem perspectiveToolStripMenuItem;
-        private System.Windows.Forms.CheckBox cbDrawPerspective;
         private System.Windows.Forms.ToolStripMenuItem miAksonometricProjection;
         private System.Windows.Forms.ToolStripMenuItem miBevelProjection;
+        private System.Windows.Forms.ToolStripMenuItem miChangeLightSourceLocation;
+        private System.Windows.Forms.CheckBox cbFill;
+        private System.Windows.Forms.CheckBox cbDrawEdges;
     }
 }
