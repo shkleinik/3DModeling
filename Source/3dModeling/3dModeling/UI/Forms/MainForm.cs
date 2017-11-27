@@ -105,9 +105,9 @@ namespace Modeling.UI.Forms
             lightSource = new Vertex(-1000, 0, 0);
 
             // var cube = new Cube(new Vertex(basePoint.X - 300, basePoint.Y + 100, basePoint.Z), 200);
-            var cube = new Cube(basePoint, 200);
+            //var cube = new Cube(basePoint, 200);
             //var pyramid = new Pyramid(basePoint, 4, 150, 300);
-            //var cone = new Cone(basePoint, 150, -300);
+            var cone = new Cone(basePoint, 150, -300);
             //var pyramidReverse = new Pyramid(new Vertex(basePoint.X - 100, basePoint.Y, basePoint.Z + 300), 9, 50, -100);
             //var axises = new CoordinateAxises(basePoint);
             //var cylinder = new Cylinder(basePoint, 100, 200);
@@ -116,12 +116,12 @@ namespace Modeling.UI.Forms
 
             objectsToDraw = S.DeserializeShapes(PATHTO_SERIALIZED_STATE) ?? new List<BaseShape> { new CoordinateAxises(basePoint) };
             //objectsToDraw.Add(pyramid);
-            //objectsToDraw.Add(cone);
+            objectsToDraw.Add(cone);
             //objectsToDraw.Add(prizm);
             //objectsToDraw.Add(pyramidReverse);
             //objectsToDraw.Add(cylinder);
             //objectsToDraw.Add(cylinderReverse);
-            objectsToDraw.Add(cube);
+            //objectsToDraw.Add(cube);
 
             SaveObjectsState(objectsToDraw);
             On_MainForm_Paint(null, null);

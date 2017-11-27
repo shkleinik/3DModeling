@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Source/3dModeling/3dModeling/3dModeling.csproj.user
+/Source/3dModeling/.vs/3dModeling/v15
+/Source/3dModeling/3dModeling/bin/Debug
+/Source/3dModeling/3dModeling/obj/Debug
